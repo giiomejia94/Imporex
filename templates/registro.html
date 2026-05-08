@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Usuario</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}">
+</head>
+<body>
+
+<header class="header">
+    <img src="{{ url_for('static', filename='img/logo.jpg')}}">
+</header>
+
+<main class="container">
+    <div class="form-box">
+        <h3>Registro de Usuario</h3>
+        <form method="post">
+            <label>Usuario</label>
+            <input type="text" placeholder="Ingrese usuario" id="username" name="username" required>
+            <label>Nombre</label>
+            <input type="text" id="nombre"  name="nombre" placeholder="Ingrese Nombre completo" required>
+            <label>Contraseña</label>
+            <input type="password" id="password" name="password" placeholder="Ingrese cotraseña" required>
+            <label>Correo</label>
+            <input type="email" id="correo" name="correo" placeholder="Ingrese correo">
+            
+            <button class="btn-register" href="registro" type="submit">Registrarme</button>
+        </form> 
+        
+    </div>   
+</main>
+
+</body>
+</html>

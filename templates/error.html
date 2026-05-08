@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}">
+</head>
+<body>
+
+<header class="header">
+    <img src="{{ url_for('static', filename='img/logo.jpg')}}">
+</header>
+
+<main class="container">
+    <div class="error-box">
+        <div class="icon-error" style="width: 278px; font-size: 65px;">⚠️</div>
+        <p><strong>Ocurrió un error</strong></p>
+        <p>Revise la información e intente nuevamente</p>
+        
+    </div>
+    <a class="btn-volver" href="login">Volver</a>
+</main>
+
+</body>
+</html>

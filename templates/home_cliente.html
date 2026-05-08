@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>home_cliente</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}">
+</head>
+<body>
+
+<header class="header">
+    <img src="{{ url_for('static', filename='img/logo.jpg')}}">
+    <input class="search" type="text" placeholder="Buscar por código o nombre de producto y pedido">
+    <div class="user-badge">
+        <div class="dropdown">
+            <span>Hola, Giovanny</span>
+            <button class="dropbtn"> ▼ </button>
+            <div class="dropdown-content">
+                <a href="#">Perfil</a>
+                <a href="logout" class="logout">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="menu-lateral">
+            <nav>
+                <ul>
+                    <li><a href='inicio'>Inicio</a></li>
+                    <li><a href='pedidos_cliente'>Pedidos</a></li>
+                    <li><a href='productos_cliente'>Productos</a></li>
+                    <li><a href='pedidos_progra_cliente'>Pedidos Programados</a></li>
+                </ul>
+            </nav>
+    </div>
+    </aside>
+    
+    <main class="content">
+        <div class="itemCarrusel">
+            <div class="targetaCarrusel"> 
+                Giio 
+            </div>        
+            <div class="flechasCarrusel">
+                <i>I</i>
+                <i>D</i>
+            </div>
+        </div>
+    </main>
+    
+
+
+
+</div>
+    
+</body>
+</html>

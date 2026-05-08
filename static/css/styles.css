@@ -1,0 +1,602 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #d9ecf7;
+}
+
+/* Encabezado */
+.header {
+    background-color: #c7def1;
+    padding: 10px 20px;
+    box-shadow: 0 0 10px rgb(53 89 117);
+}
+
+.header h2 {
+    margin: 0;
+    color: #0a3d62;
+}
+
+.logoword {
+    width: 75px;
+    padding-right: 110px;
+    position: relative;
+    left: 110px;
+    top: 37px;
+    margin-bottom: 0%;
+}
+
+
+/* Contenedor principal */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 60px);
+}
+
+/* Caja de login */
+.login-box {
+    background-color: #c7def1;
+    padding: 25px;
+    position: fixed;
+    padding-block: 65px;
+    width: 280px;
+    border-radius: 6px;
+    box-shadow: 0 0 20px rgb(53 89 117);
+    text-align: center;
+}
+/* contenedor inicio cliente */
+.inicio-cliente {
+    width: 800px;
+    margin: auto;
+    padding-top: 20px;
+}
+
+/* contenedor pedidos cliente */
+
+.pedidos-cliente {
+    width: 800px;
+    margin: auto;
+    padding-top: 20px;
+}
+/* contenedor productos cliente */
+.productos-cliente {
+    width: 800px;
+    margin: auto;
+    padding-top: 20px;
+}
+.login-box h3 {
+    margin-bottom: 0px;
+    padding-right: 100px;
+    position: relative;
+    left: 22px;
+    
+}
+
+.login-box p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.login-box label {
+    display: block;
+    text-align: left;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.login-box input {
+    width: 93%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.msg-error{
+    color: red;
+    display: block;
+    margin-top: 1px;
+
+}
+/* Botones */
+.btn-login {
+    width: 100%;
+    padding: 7px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    background-color: #bdbdbd;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btn-crearcuenta {
+    width: 65%;
+    text-decoration: none;
+    padding: 7px;
+    margin-top: 5px;
+    background-color: #bdbdbd;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: rgb(19, 18, 18);
+    position: absolute;
+    left: 49px;
+}
+
+.btn-volver {
+    width: 65%;
+
+}
+.btn-register {
+
+    width: 93%;
+    text-decoration: none;
+    padding: 7px;
+    margin-top: 5px;
+    background-color: #bdbdbd;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: black;
+}
+
+.btn-login:hover, 
+.btn-crearcuenta:hover,
+.btn-register:hover {
+    background-color: #adc3aa;
+}
+
+/* clase de registro */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(#cfe6f7, #eaf4fb);
+}
+
+.header {
+    justify-content: space-between;
+    background: #c7def1;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 100px;
+    position: fixed;
+    width: 100%;
+    
+}
+
+.search {
+    padding: 6px;
+    width: 300px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 110vh;
+}
+
+.form-box {
+    background: #c7def1;
+    padding: 25px;
+    width: 280px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow:  0 0 20px rgb(53 89 117);
+}
+.error-box {
+    background: #c7def1;
+    padding: 25px;
+    width: 280px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(248, 106, 106, 0.2);
+}
+.form-box input {
+    width: 93%;
+    padding: 7px;
+    margin-bottom: 28px;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 8px;
+    background: #bdbdbd;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.btn-primary:hover {
+    background-color: #adc3aa;
+}
+.layout {  
+  display: flex;
+}
+.sidebar {
+    width: 160px;
+    background: #d8e9f5;
+    padding: 25px;
+}
+
+.sidebar a {
+    display: block;
+    margin: 10px 0;
+}
+
+.content {
+    
+    flex: 1;
+    padding-top: 90px;
+}
+
+.card {
+    background: #ffffff;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;  
+}
+
+
+
+.grid {
+    display: flex;
+    gap: 15px;
+}
+
+.box {
+    background: #fff;
+    padding: 10px;
+    flex: 1;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 6px;
+    text-align: center;
+}
+
+.btn-green {
+    background: #8bc34a;
+    border: none;
+    padding: 6px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+/*  style pedidos cliente */
+
+.user-badge {
+
+    background: #e6f2fb;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-right: 30px;
+}
+
+.center {
+    text-align: center;
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: space-around;
+   
+}
+
+/* botones productos */
+.producto{
+    width:  150px;
+    padding: 10px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    
+    
+}
+
+.order-options {
+
+    display: flex;
+    justify-content: center;
+    gap: 190px;
+    margin-top: 1px;
+    
+   
+}
+
+.order-box {
+    background: #ffffff;
+    width: 130px;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    
+   
+}
+
+.order-box:hover {
+    background: #eaf4fb;
+}
+
+.order-box .icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.image-placeholder {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.sidebar a.active {
+    font-weight: bold;
+    background: #c3def0;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+/* pedidos */
+
+body {
+    font-family: Arial;
+    background: #e9f3fb;
+    margin: 0;
+}
+
+header {
+    padding: 15px;
+    text-align: center;
+    background: #cde4f6;
+}
+
+.botones {
+    text-align: center;
+    margin: 20px;
+}
+
+.botones button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    color: white;
+}
+
+.btn-agregar { background: green; }
+.btn-editar { background: orange; }
+.btn-eliminar { background: red; }
+
+/* PRODUCTOS */
+.productos {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
+.producto {
+    background: lch(87.45% 19.23 263.39);
+    width: 150px;
+    padding: 10px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+
+
+/* Menú lateral */
+.menu-lateral {
+    width: 203px;
+    background-color: #e6f2fb;
+    position: fixed;
+    top: 79px;
+    left: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    display:flex;
+
+}
+
+/* Lista */
+.menu-lateral ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+   
+}
+
+
+/* Opciones del menú */
+.menu-lateral li a {
+    text-decoration: none;
+    color: #0a3d62;
+    padding: 12px 20px;
+    cursor: pointer;
+    color: #4d61d3;
+    border-left: 4px solid transparent;
+    transition: all 0.5s ease;
+    text-decoration: none;
+}
+
+/* Efecto hover (cuando pasa el mouse) */
+.menu-lateral li:hover {
+    background-color: #cfe7fb;
+    border-left: 4px solid #2c7be5;
+    padding-left: 25px;
+}
+
+/* Opción activa */
+.menu-lateral li.activo {
+    background-color: #b8dcf5;
+    border-left: 4px solid #1a5fb4;
+    font-weight: bold;
+}
+
+
+/* menu desplegable usuario */
+
+/* Contenedor del menú */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+        margin: 5px;
+    }
+
+    /* Botón principal */
+    .dropbtn {
+        background-color: #3498db;
+        color: white;
+        padding: px 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .dropbtn:hover {
+        background-color: #2980b9;
+    }
+
+    /* Contenido del menú */
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 90px;
+        box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+        border-radius: 4px;
+        z-index: 1;
+    }
+
+    /* Opciones del menú */
+    .dropdown-content a {
+        color: black;
+        padding: 10px 14px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Mostrar menú al pasar el mouse */
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    /* Estilo especial para Logout */
+    .logout {
+        color: red;
+        font-weight: bold;
+    }
+
+
+/* Botón participar */
+.btn-participar{
+    background: #4ea35a;
+    color: black;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.btn-participar:hover{
+    background: #3e8c49;
+}
+
+/* Contenedor general */
+.pedidos-container{
+    width: 500px;
+    margin: auto;
+    padding-top: 20px;
+}
+
+/* Tarjeta de pedido */
+.pedido-card{
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Icono y tipo */
+.pedido-info{
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+/* Caja del icono */
+.icono-box{
+    background: #e8edf3;
+    border: 1px solid #9bb2c6;
+    border-radius: 6px;
+    padding: 8px;
+    text-align: center;
+    width: 70px;
+}
+
+.icono-box img{
+    width: 45px;
+}
+
+.icono-box span{
+    display: block;
+    font-size: 14px;
+    color: #1a4f8a;
+}
+
+/* Fecha */
+.fecha{
+    font-size: 20px;
+    color: #000;
+}
+
+/* Botón participar */
+.btn-participar{
+    background: #4ea35a;
+    color: black;
+    border: none;
+    padding: 8px 25px;
+    font-size: 20px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.btn-participar:hover{
+    background: #3e8c49;
+}
+
+/* Carrusel */
+
+.targetaCarrusel{
+    border: 1px solid black;
+}
+
+.targetaCarrusel {
+    background-color: #228d31;
+}
+
+.flechasCarrusel{
+    background-color: #1469a1;
+}
