@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>home_cliente</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}">
+    <script src="https://kit.fontawesome.com/2be9443358.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -37,17 +38,50 @@
     </aside>
     
     <main class="content">  
-        
-    <div class="medio-container">
-        <div class="itemCarrusel">
-            <div class="targetaCarrusel"> 
-                Giio 
+    <div id="contentItemsCarrusel">
+        <div class="medio-container">
+            <div class="itemCarrusel" id="itemCarrusel-1">
+            <div class="targetaCarrusel" id="targetaCarrusel-1"> 
+                <img src="{{ url_for('static', filename='img/pan-yellow.jpg')}}" alt="item-1-Carrusel" class="imgCarrusel">
             </div>        
-            <div class="flechasCarrusel">
-                <i>I</i>
-                <i>D</i>
-            </div>
+                <div class="flechasCarrusel">
+                <a href="#itemCarrusel-3">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <a href="#itemCarrusel-2">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+                </div>
+
+            <div class="medio-container">
+            <div class="itemCarrusel" id="itemCarrusel-2">
+            <div class="targetaCarrusel" id="targetaCarrusel-2">
+                B
+            </div>        
+                <div class="flechasCarrusel">
+                <a href="#itemCarrusel-1">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <a href="#itemCarrusel-3">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+                </div>
+
+            <div class="medio-container">
+            <div class="itemCarrusel" id="itemCarrusel-3">
+            <div class="targetaCarrusel" id="targetaCarrusel-3">
+                C
+            </div>        
+                <div class="flechasCarrusel">
+                <a href="#itemCarrusel-2">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <a href="#itemCarrusel-1">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+                </div>
     </div>
+</div>
         
     </main>
 </div>
