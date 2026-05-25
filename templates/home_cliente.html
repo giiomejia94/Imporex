@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>home_cliente</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}">
-    <script src="https://kit.fontawesome.com/2be9443358.js" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static',filename='js/carrusel.js') }}"></script>
 </head>
 <body>
 
@@ -36,59 +36,199 @@
             </nav>
     </div>
     </aside>
-    
-    <main class="content">  
-    <div id="contentItemsCarrusel">
-        <div class="medio-container">
-            <div class="itemCarrusel" id="itemCarrusel-1">
-            <div class="targetaCarrusel" id="targetaCarrusel-1"> 
-                <img src="{{ url_for('static', filename='img/pan-yellow.jpg')}}" alt="item-1-Carrusel" class="imgCarrusel">
-            </div>        
-                <div class="flechasCarrusel">
-                <a href="#itemCarrusel-3">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </a>
-                <a href="#itemCarrusel-2">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </a>
-                </div>
 
-            <div class="medio-container">
-            <div class="itemCarrusel" id="itemCarrusel-2">
-            <div class="targetaCarrusel" id="targetaCarrusel-2">
-                B
-            </div>        
-                <div class="flechasCarrusel">
-                <a href="#itemCarrusel-1">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </a>
-                <a href="#itemCarrusel-3">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </a>
-                </div>
+<main class="content">
 
-            <div class="medio-container">
-            <div class="itemCarrusel" id="itemCarrusel-3">
-            <div class="targetaCarrusel" id="targetaCarrusel-3">
-                C
-            </div>        
-                <div class="flechasCarrusel">
-                <a href="#itemCarrusel-2">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </a>
-                <a href="#itemCarrusel-1">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </a>
-                </div>
+<div class="carousel-container">
+
+        <!-- CARRUSEL -->
+        <div class="carousel">
+
+            <!-- IMAGEN 1 -->
+            <div class="slide active">
+
+                <img src="{{ url_for('static',
+                filename='img/pan-yellow.jpg') }}"
+                alt="Producto 1"
+                class="imgCarrusel">
+
+            </div>
+
+            <!-- IMAGEN 2 -->
+            <div class="slide">
+
+                <img src="{{ url_for('static',
+                filename='img/pony malta.jpg') }}"
+                alt="Producto 2"
+                class="imgCarrusel">
+
+            </div>
+
+            <!-- IMAGEN 3 -->
+            <div class="slide">
+
+                <img src="{{ url_for('static',
+                filename='img/producto3.jpg') }}"
+                alt="Producto 3"
+                class="imgCarrusel">
+
+            </div>
+
+        </div>
+
+
+        <!-- BOTONES -->
+
+        <button class="btnCarrusel prev">
+            ❮
+        </button>
+
+        <button class="btnCarrusel next">
+            ❯
+        </button>
+
+
+        <!-- INDICADORES -->
+
+        <div class="indicadores">
+
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+
+        </div>
+
     </div>
+
+</main>
 </div>
+<div class="containerCliente">
+    <div class="pedido-actual">
+        <h2>Estado del Pedido Actual</h2>
+        <div class="tracking">
+
+        <!-- Paso 1 -->
+        <div class="step completed">
+            <div class="circle">✓</div>
+            <div class="info">
+                <h4>Preparación</h4>
+                <p>Productos empacados</p>
+            </div>
         
-    </main>
+
+        <div class="line active"></div>
+
+        <!-- Paso 2 -->
+        <div class="step completed">
+            <div class="circle">✓</div>
+            <div class="info">
+                <h4>Despacho</h4>
+                <p>En puerto de origen</p>
+            </div>
+        </div>
+
+        <div class="line active"></div>
+
+        <!-- Paso 3 -->
+        <div class="step current">
+            <div class="circle">3</div>
+            <div class="info">
+                <h4>En Ruta</h4>
+                <p>Tránsito marítimo</p>
+            </div>
+        </div>
+
+        <div class="line"></div>
+
+        <!-- Paso 4 -->
+        <div class="step">
+            <div class="circle">4</div>
+            <div class="info">
+                <h4>Entregado</h4>
+                <p>Puerto destino</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="detalle-envio">
+        <strong>Contenedor:</strong>
+        MSKU-4827193 •
+        ETA: 15 Ene 2025 •
+        Ruta: Shanghái → Callao
+    </div>
+
+</div>
+    </div>
+    <div class="containerfacturas">
+    <div class="facturas-container">
+    <h2>Facturas Pendientes</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Factura</th>
+                <th>Fecha</th>
+                <th>Monto</th>
+                <th>Vencimiento</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>INV-2024-0892</td>
+                <td>28 Nov 2024</td>
+                <td>$12,450.00</td>
+                <td>28 Dic 2024</td>
+
+                <td>
+                    <span class="estado vencida">
+                        Vencida
+                    </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>INV-2024-0915</td>
+                <td>10 Dic 2024</td>
+                <td>$8,320.00</td>
+                <td>10 Ene 2025</td>
+
+                <td>
+                    <span class="estado pendiente">
+                        Pendiente
+                    </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>INV-2024-0938</td>
+                <td>20 Dic 2024</td>
+                <td>$5,780.00</td>
+                <td>20 Ene 2025</td>
+
+                <td>
+                    <span class="estado pendiente">
+                        Pendiente
+                    </span>
+                </td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    <div class="total-facturas">
+
+        <span>Total por cancelar:</span>
+
+        <strong>$26,550.00</strong>
+
+    </div>
+
+</div>>
 </div>
 
 
-
-</div>
-    
+</div>   
 </body>
 </html>

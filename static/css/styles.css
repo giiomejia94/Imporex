@@ -165,6 +165,7 @@ body {
     gap: 100px;
     position: fixed;
     width: 100%;
+    z-index: 1000;
     
 }
 
@@ -229,7 +230,8 @@ display: flex;
 
 .content {
     flex: 1;
-    padding-top: 108px;
+    padding-top: 76px;
+
     
 }
 
@@ -527,8 +529,14 @@ header {
     padding-top: 20px;
 }
 
+.containerEstado{
+    width: 800px;
+    margin: auto;
+    padding-top: 20px;
+}
+
 .medio-container {
-    width: 700px;
+    width: 800px;
     margin: auto;
     padding-top: 0px;
     position: relative;
@@ -597,17 +605,17 @@ header {
 
 /* Carrusel */
 #contentItemsCarrusel{
-    height: 200px;
+    height: 300px;
     overflow: hidden;
 
 }
 
 .itemCarrusel{
-    height: 200px;   
+    height: 300px;   
 }
 
 .targetaCarrusel {
-    height: 200px;
+    height: 300px;
 }
 
 .flechasCarrusel{
@@ -641,4 +649,344 @@ a{
     object-fit: inherit;
 }
 
+.containerCliente{
+    width: 800px;
+    left: 27%;
+    top: 429px;
+    padding-top: 88px;
+    position: absolute;
+}
 
+/* style estado de pedido */
+
+.pedido-actual, .facturas-container{
+background: #f5f7fa;
+border-radius: 14px;
+padding: 25px;
+margin: 20px;
+box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.pedido-actual h2,
+.facturas-container h2{
+color: #1f3558;
+margin-bottom: 25px;
+margin-top: -10px;
+}
+.tracking{
+display: flex;
+align-items: center;
+justify-content: space-between;
+flex-wrap: wrap;
+}
+
+
+/* PASOS */
+
+.step{
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+
+/* CIRCULOS */
+
+.circle{
+width: 40px;
+height: 40px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: bold;
+color: white;
+background: #cfd6df;
+}
+
+
+/* COMPLETADO */
+
+.completed .circle{
+background: #19b37a;
+}
+
+
+/* ACTUAL */
+
+.current .circle{
+background: #163f77;
+}
+
+
+/* LINEAS */
+
+.line{
+flex: 1;
+height: 3px;
+background: #d4dce5;
+margin: 0 10px;
+}
+
+
+.line.active{
+background: #19b37a;
+}
+
+
+/* INFO */
+
+.info h4{
+margin: 0;
+color: #1f3558;
+font-size: 15px;
+}
+
+
+.info p{
+margin: 0;
+color: #7a8699;
+font-size: 13px;
+}
+
+
+/* DETALLE ENVIO */
+
+.detalle-envio{
+margin-top: 25px;
+background: #e9eef5;
+padding: 15px;
+border-radius: 8px;
+color: #35507a;
+}
+
+table{
+width: 100%;
+border-collapse: collapse;
+}
+
+
+table thead{
+color: #607086;
+}
+
+
+table th,
+table td{
+padding: 14px;
+text-align: left;
+border-bottom: 1px solid #e2e8f0;
+}
+
+
+/* ESTADOS */
+
+.estado{
+padding: 6px 12px;
+border-radius: 20px;
+font-size: 13px;
+font-weight: bold;
+}
+
+
+/* VENCIDA */
+
+.vencida{
+
+    background: #ffd7d7;
+
+    color: #d63031;
+}
+
+
+/* PENDIENTE */
+
+.pendiente{
+
+    background: #ffe8c3;
+
+    color: #d68910;
+}
+
+
+/* TOTAL */
+
+.total-facturas{
+
+    margin-top: 20px;
+
+    background: #eef2f7;
+
+    padding: 18px;
+
+    border-radius: 10px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+
+.total-facturas strong{
+
+    font-size: 28px;
+
+    color: #163f77;
+}
+
+/* CONTENEDOR */
+/* ========================= */
+
+.carousel-container{
+
+    position: relative;
+
+    width: 90%;
+
+    max-width: 900px;
+
+    margin: 30px auto;
+
+    overflow: hidden;
+
+    border-radius: 15px;
+
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+
+    background: #fff;
+    
+}
+
+
+/* AREA CARRUSEL */
+
+.carousel{
+
+    position: relative;
+
+    width: 100%;
+
+    height: 400px;
+}
+
+
+/* SLIDES */
+
+.slide{
+
+    position: absolute;
+
+    width: 100%;
+
+    height: 100%;
+
+    opacity: 0;
+
+    transition: opacity 0.8s ease;
+}
+
+
+/* ACTIVO */
+
+.slide.active{
+
+    opacity: 1;
+}
+
+
+/* IMAGEN */
+
+.imgCarrusel{
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+/* BOTONES */
+
+.btnCarrusel{
+
+    position: absolute;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    background: rgba(0,0,0,0.5);
+
+    color: white;
+
+    border: none;
+
+    padding: 15px;
+
+    font-size: 25px;
+
+    cursor: pointer;
+
+    border-radius: 50%;
+}
+
+
+/* IZQUIERDA */
+
+.prev{
+
+    left: 15px;
+}
+
+
+/* DERECHA */
+
+.next{
+
+    right: 15px;
+}
+
+
+/* INDICADORES */
+
+.indicadores{
+
+    position: absolute;
+
+    bottom: 15px;
+
+    width: 100%;
+
+    text-align: center;
+}
+
+
+/* DOTS */
+
+.dot{
+
+    display: inline-block;
+
+    width: 12px;
+
+    height: 12px;
+
+    border-radius: 50%;
+
+    background: #d0d0d0;
+
+    margin: 0 5px;
+
+    cursor: pointer;
+}
+
+
+/* DOT ACTIVO */
+
+.dot.active{
+
+    background: #1f4f8a;
+}
