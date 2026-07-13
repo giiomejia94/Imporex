@@ -1,58 +1,141 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>home_prueba</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}">
-</head>
-<body>
+{% extends 'base_admin.html' %}
 
-<header class="header">
-    <img src="{{ url_for('static', filename='img/logo.jpg')}}">
-    <input class="search" type="text" placeholder="Buscar por código o nombre de producto y pedido">
-    <div class="user-badge">
-        <div class="dropdown">
-            <span>Hola, Giovanny</span>
-            <button class="dropbtn"> ▼ </button>
-            <div class="dropdown-content">
-                <a href="#">Perfil</a>
-                <a href="logout" class="logout">Cerrar sesión</a>
+{% block titulo %}Dashboard – Imporex{% endblock %}
+
+{% block contenido %}
+<div class="content-homeadmin">
+
+    <!-- ===================== USUARIOS ===================== -->
+    <section class="card usuarios-panel">
+        <h2 class="panel-title">Usuarios</h2>
+
+        <div class="usuarios-acciones">
+            <button id="btnEditarUsuario" class="btn-accion-admin">Editar</button>
+            <button id="btnAgregarUsuario" class="btn-accion-admin">Agregar</button>
+            <button id="btnEliminarUsuario" class="btn-accion-admin">Eliminar</button>
+        </div>
+
+        <div id="gridUsuarios" class="usuarios-grid">
+            {% for usuario in usuarios %}
+            <div class="usuario-card" data-id="{{ usuario['id_usuario'] }}">
+                <input type="checkbox" class="usuario-check" data-id="{{ usuario['id_usuario'] }}">
+                <div class="avatar-circle">
+                    <img src="{% if usuario['foto_perfil'] %}/{{ usuario['foto_perfil'] }}{% else %}{{ url_for('static', filename='img/avatar_default.png') }}{% endif %}"
+                        alt="avatar"
+                        onerror="this.src='/static/img/avatar_default.png'">
+                </div>
+                <span class="usuario-nombre">{{ usuario['nombre'] }}</span>
+                <span class="usuario-rol-tag">{{ 'Admin' if usuario['id_rol'] == 2 else 'Cliente' }}</span>
             </div>
+            {% else %}
+            <p class="empty-msg">No hay usuarios registrados todavía.</p>
+            {% endfor %}
         </div>
+    </section>
+
+    <!-- ============ PETICIONES + PEDIDOS ============ -->
+    <div class="admin-listas-row">
+
+        <!-- Peticiones pendientes -->
+        <section class="card peticiones-panel">
+            <h3 class="panel-title-sm">Peticiones pendientes de usuarios</h3>
+            <div class="tabla-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Fecha de petición</th>
+                            <th>Rol</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaPeticiones">
+                        {% for peticion in peticiones_pendientes %}
+                        <tr data-id="{{ peticion['id_usuario'] }}">
+                            <td>{{ peticion['nombre'] }}</td>
+                            <td>{{ peticion['correo'] }}</td>
+                            <td>{{ peticion['fecha_registro'] }}</td>
+                            <td>
+                                <select class="select-rol">
+                                    <option value="1">Cliente</option>
+                                    <option value="2">Admin</option>
+                                </select>
+                            </td>
+                            <td class="acciones-peticion">
+                                <button class="btn-aprobar" data-id="{{ peticion['id_usuario'] }}">✔</button>
+                                <button class="btn-rechazar" data-id="{{ peticion['id_usuario'] }}">✖</button>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="5" class="empty-msg">No hay peticiones pendientes.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Pedidos recientes -->
+        <section class="card pedidos-panel">
+            <h3 class="panel-title-sm">Pedidos</h3>
+            <div class="tabla-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Tipo</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaPedidos">
+                        {% for pedido in pedidos_recientes %}
+                        <tr class="fila-pedido" data-id="{{ pedido['id_pedido'] }}">
+                            <td>{{ pedido['nombre_cliente'] }}</td>
+                            <td>{{ '🚢 Marítimo' if pedido['tipo_envio'] == 'maritimo' else '✈️ Aéreo' }}</td>
+                            <td>{{ pedido['fecha_pedido'] }}</td>
+                            <td><span class="estado-tag estado-{{ pedido['estado']|lower }}">{{ pedido['estado'] }}</span></td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="4" class="empty-msg">No hay pedidos registrados.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </div>
-</header>
-<div class="layout">
-    
-    <aside class="sidebar">
-        <div class="menu-lateral">
-            <nav>
-                <ul>
-                    <li><a href='home_cliente.html'>Inicio</a></li>
-                        <li><a href="pedidos_cliente.html">Pedidos</a></li>
-                        <li><a href='productos_cliente.html'>Productos</a></li>
-                        <li><a href="pedidos_progra_Cliente.html">Pedidos Programados</a></li>
-                </ul>
-            </nav>
-        </div>
-    </aside>
-    <main class="content">
-    <div class="card center">
-        <span>Hola, Giovanny 1</span>
-        
-        </div>
-        <div class="card center">
-        <span>estado de mi pedido</span>
-        </div>
-        <div class="card center">
-        <span>Pedidos</span>
-        
-        </div>
+
+</div>
+
+<!-- Modal Agregar / Editar usuario -->
+<div id="modalUsuario" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+        <h3 id="modalUsuarioTitulo">Agregar usuario</h3>
+        <form id="formUsuario">
+            <label>Usuario</label>
+            <input type="text" id="usuarioUsername" name="username" required>
+            <input type="hidden" id="usuarioId" name="id_usuario">
+            <label>Nombre</label>
+            <input type="text" id="usuarioNombre" name="nombre" required>
+            <label>Correo</label>
+            <input type="email" id="usuarioCorreo" name="correo" required>
+            <label>Contraseña</label>
+            <input type="password" id="usuarioPassword" name="password">
+            <label>Rol</label>
+            <select id="usuarioRol" name="id_rol" required>
+                <option value="1">Cliente</option>
+                <option value="2">Admin</option>
+            </select>
+            <div class="modal-acciones">
+                <button type="submit" class="btn-primary">Guardar</button>
+                <button type="button" id="btnCerrarModalUsuario" class="btn-login">Cancelar</button>
+            </div>
+        </form>
     </div>
-    </div>
-    
 </div>
-</main>
-</div>
-</div>
-</body>
-</html>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/home_admin.js') }}"></script>
+{% endblock %}

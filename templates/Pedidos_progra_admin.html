@@ -1,61 +1,151 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Pedidos-programados</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}">
-</head>
-<body>
+{% extends 'base_admin.html' %}
 
-<header class="header">
-    <img src="{{ url_for('static', filename='img/logo.jpg')}}">
-    <input class="search" type="text" placeholder="Buscar por código o nombre de producto y pedido">
-    <div class="user-badge">
-        
-        <div class="dropdown">
-            <span>Hola, Giovanny</span>
-            <button class="dropbtn"> ▼ </button>
-            <div class="dropdown-content">
-                <a href="#">Perfil</a>
-                <a href="logout" class="logout">Cerrar sesión</a>
-            </div>
-        </div>
+{% block titulo %}Pedidos Programados – Admin Imporex{% endblock %}
 
+{% block contenido %}
+
+<div class="content-progradmin">
+    <div>
+        <h1>Pedidos Programados</h1>
+        <p>Gestión de despachos programados marítimos y aéreos</p>
     </div>
-</header>
-
-<div class="layout">
-
-    <aside class="sidebar">
-        <div class="menu-lateral">
-            <nav>
-                <ul>
-                    <li><a href='inicio'>Inicio</a></li>
-                    <li><a href='pedidos_cliente'>Pedidos</a></li>
-                    <li><a href='productos_cliente'>Productos</a></li>
-                    <li><a href='pedidos_progra_cliente'>Pedidos Programados</a></li>
-                </ul>
-            </nav>
-        </div>
-    </aside>
-    <!-- Área central -->
-    <main class="content">
-        <!-- Realizar pedido -->
-        <div class="card center">
-            <h3>Realizar pedido</h3>
-            <div class="order-options">
-                <div class="order-box">
-                    <div class="icon">🚢</div>
-                    <p>Contenedor</p>
-                </div>
-                <div class="order-box">
-                    <div class="icon">✈️</div>
-                    <p>Aéreo</p>
-                </div>
-            </div>
-        </div>
-    </main>
+    <button class="btn btn-primary"
+        onclick="document.getElementById('modalNuevoDespacho').classList.add('show')">
+        ＋ Nuevo despacho
+    </button>
 </div>
 
-</body>
-</html>
+<!-- Despachos disponibles -->
+<div class="card">
+    <div class="card-title">Despachos activos</div>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tipo</th>
+                    <th>Fecha despacho</th>
+                    <th>Cupos disponibles</th>
+                    <th>Clientes inscritos</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for despacho in despachos %}
+                <tr>
+                    <td><strong>{{ despacho['id'] }}</strong></td>
+                    <td>{{ '🚢 Marítimo' if despacho['tipo'] == 'maritimo' else '✈️ Aéreo' }}</td>
+                    <td>{{ despacho['fecha'] }}</td>
+                    <td>{{ despacho['cupos'] }}</td>
+                    <td>{{ despacho['inscritos'] }}</td>
+                    <td><span class="badge {{ despacho['estado']|lower }}">{{ despacho['estado'] }}</span></td>
+                    <td>
+                        <button class="action-btn" title="Ver inscritos">👥</button>
+                        <button class="action-btn" title="Editar">✏️</button>
+                        <button class="action-btn" title="Eliminar" style="color:red">🗑</button>
+                    </td>
+                </tr>
+                {% else %}
+                <!-- Datos de ejemplo -->
+                <tr>
+                    <td><strong>DSP-001</strong></td>
+                    <td>🚢 Marítimo</td>
+                    <td>15-Enero-2026</td>
+                    <td>40 pallets</td>
+                    <td>3</td>
+                    <td><span class="badge activo">Activo</span></td>
+                    <td>
+                        <button class="action-btn">👥</button>
+                        <button class="action-btn">✏️</button>
+                        <button class="action-btn" style="color:red">🗑</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>DSP-002</strong></td>
+                    <td>✈️ Aéreo</td>
+                    <td>25-Enero-2026</td>
+                    <td>10 espacios</td>
+                    <td>1</td>
+                    <td><span class="badge activo">Activo</span></td>
+                    <td>
+                        <button class="action-btn">👥</button>
+                        <button class="action-btn">✏️</button>
+                        <button class="action-btn" style="color:red">🗑</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>DSP-003</strong></td>
+                    <td>🚢 Marítimo</td>
+                    <td>29-Febrero-2026</td>
+                    <td>40 pallets</td>
+                    <td>0</td>
+                    <td><span class="badge activo">Activo</span></td>
+                    <td>
+                        <button class="action-btn">👥</button>
+                        <button class="action-btn">✏️</button>
+                        <button class="action-btn" style="color:red">🗑</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Nuevo Despacho -->
+<div class="modal-overlay" id="modalNuevoDespacho">
+    <div class="modal">
+        <button class="modal-close"
+            onclick="document.getElementById('modalNuevoDespacho').classList.remove('show')">✕</button>
+        <h3>Crear nuevo despacho</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Tipo de envío</label>
+                <select>
+                    <option value="maritimo">🚢 Marítimo</option>
+                    <option value="aereo">✈️ Aéreo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Fecha de despacho</label>
+                <input type="date">
+            </div>
+            <div class="form-group">
+                <label>Cupos disponibles</label>
+                <input type="number" min="1" placeholder="Ej. 40">
+            </div>
+            <div class="form-group">
+                <label>Puerto de origen</label>
+                <input type="text" placeholder="Ej. Buenaventura, Colombia">
+            </div>
+            <div class="form-group">
+                <label>Puerto de destino</label>
+                <input type="text" placeholder="Ej. Callao, Perú">
+            </div>
+            <div class="form-group">
+                <label>Naviera / Aerolínea</label>
+                <input type="text" placeholder="Ej. Maersk, Avianca Cargo">
+            </div>
+            <div class="form-group" style="grid-column:1/-1">
+                <label>Observaciones</label>
+                <textarea placeholder="Condiciones especiales, requisitos..."></textarea>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-outline"
+                onclick="document.getElementById('modalNuevoDespacho').classList.remove('show')">Cancelar</button>
+            <button class="btn btn-primary">Crear despacho</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); });
+});
+</script>
+{% endblock %}

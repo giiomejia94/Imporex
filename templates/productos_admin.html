@@ -1,57 +1,128 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>productos_cliente</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}">
-</head>
-<body>
+{% extends 'base_admin.html' %}
 
-<header class="header">
-    <img src="{{ url_for('static', filename='img/logo.jpg')}}">
-    <input class="search" type="text" placeholder="Buscar por código o nombre de producto y pedido">
-    <div class="user-badge">
-        <div class="dropdown">
-            <span>Hola, Giovanny</span>
-            <button class="dropbtn"> ▼ </button>
-            <div class="dropdown-content">
-                <a href="#">Perfil</a>
-                <a href="logout" class="logout">Cerrar sesión</a>
+{% block titulo %}Productos – Admin Imporex{% endblock %}
+
+{% block contenido %}
+<div class="content-productosadmin">
+<!-- Panel de acciones -->
+<div class="panel-acciones">
+    <h2>Productos</h2>
+    <div class="acciones-botones">
+        <button class="btn-accion btn-editar-accion" onclick="iniciarEditar()">Editar</button>
+        <button class="btn-accion btn-agregar-accion" onclick="iniciarAgregar()">Agregar</button>
+        <button class="btn-accion btn-eliminar-accion" onclick="iniciarEliminar()">Eliminar</button>
+    </div>
+</div>
+
+<!-- Pestañas de categorías -->
+<div class="catalogo-tabs-bar" id="catalogo-admin-tabs"></div>
+
+<!-- Catálogo -->
+<div id="catalogo-admin-contenido">
+    <div class="empty-state"><div class="empty-icon">⏳</div><p>Cargando productos...</p></div>
+</div>
+
+<!-- BUSCADOR -->
+<div class="modal-overlay" id="buscadorAdminOverlay">
+    <div class="buscador-box">
+        <h3>
+            <span id="buscador-admin-titulo">Buscar producto</span>
+            <button class="detalle-close" onclick="cerrarBuscadorAdmin()">×</button>
+        </h3>
+        <input type="text" id="buscador-admin-input" placeholder="Código o nombre del producto..."
+            oninput="buscarProductoAdmin(this)">
+        <div id="buscador-admin-resultados"></div>
+    </div>
+</div>
+
+<!-- FORMULARIO AGREGAR / EDITAR PRODUCTO -->
+<div class="modal-overlay" id="formularioProductoOverlay">
+    <div class="form-producto-box">
+        <h3>
+            <span id="form-producto-titulo">Agregar nuevo producto</span>
+            <button class="detalle-close" onclick="cerrarFormularioProducto()">×</button>
+        </h3>
+        <div class="form-producto-grid">
+            <div>
+                <label>Código</label>
+                <input type="text" id="campo-codigo" placeholder="Ej. 25684">
+            </div>
+            <div>
+                <label>Nombre del producto</label>
+                <input type="text" id="campo-nombre" placeholder="Ej. Harina pan 1 kg">
+            </div>
+            <div>
+                <label>Categoría</label>
+                <select id="campo-categoria">
+                    <option>Despensa</option>
+                    <option>Bienestar</option>
+                    <option>Hogar</option>
+                    <option>Niños</option>
+                </select>
+            </div>
+            <div>
+                <label>Presentación</label>
+                <input type="text" id="campo-presentacion" placeholder="Ej. pack x20Und">
+            </div>
+            <div>
+                <label>Precio (USD)</label>
+                <input type="number" id="campo-precio" step="0.01" placeholder="Ej. 18.35">
+            </div>
+            <div>
+                <label>Unidad de medida</label>
+                <input type="text" id="campo-unidad" placeholder="Ej. kg, unidad, galón">
+            </div>
+            <div>
+                <label>Peso por pack (kg)</label>
+                <input type="number" id="campo-peso-pack" step="0.01" placeholder="Ej. 20.1">
+            </div>
+            <div>
+                <label>Cantidad por tendido</label>
+                <input type="number" id="campo-cant-tendido" placeholder="Ej. 8">
+            </div>
+            <div>
+                <label>Cantidad máxima (pallet)</label>
+                <input type="number" id="campo-cant-maxima" placeholder="Ej. 80">
+            </div>
+            <div>
+                <label>Apto para envío</label>
+                <div class="checks-aptitud">
+                    <label><input type="checkbox" id="campo-apto-maritimo"> Marítimo</label>
+                    <label><input type="checkbox" id="campo-apto-aereo"> Aéreo</label>
+                </div>
+            </div>
+            <div class="form-full">
+                <div class="imagenes-upload">
+                    <div class="upload-bloque">
+                        <label class="titulo-upload">Imagen del producto</label>
+                        <div class="preview-imagen" id="preview-imagen-producto">
+                            <span class="preview-vacio">Sin imagen</span>
+                        </div>
+                        <input type="file" id="input-imagen-producto" accept=".png,.jpg,.jpeg,.webp"
+                            onchange="previsualizarImagen(this, 'preview-imagen-producto')">
+                    </div>
+                    <div class="upload-bloque">
+                        <label class="titulo-upload">Imagen de distribución (pallet)</label>
+                        <div class="preview-imagen" id="preview-imagen-estiba">
+                            <span class="preview-vacio">Sin imagen</span>
+                        </div>
+                        <input type="file" id="input-imagen-estiba" accept=".png,.jpg,.jpeg,.webp"
+                            onchange="previsualizarImagen(this, 'preview-imagen-estiba')">
+                    </div>
+                </div>
             </div>
         </div>
-        
-    </div>
-</header>
-<div class="layout">
-    <aside class="sidebar">
-        <div class="menu-lateral">
-            <nav>
-                <ul>
-                    <li><a href='inicio'>Inicio</a></li>
-                    <li><a href='pedidos_cliente'>Pedidos</a></li>
-                    <li><a href='productos_cliente'>Productos</a></li>
-                    <li><a href='pedidos_progra_cliente'>Pedidos Programados</a></li>
-                </ul>
-            </nav>
-        </div>
-    </aside>
-    
-    <div class="card center">
-            <span>estado de mi pedido</span>
+        <div class="form-producto-actions">
+            <button class="btn-cancelar" onclick="cerrarFormularioProducto()">Cancelar</button>
+            <button class="btn-guardar" id="btn-guardar-producto" onclick="guardarProducto()">Guardar producto</button>
         </div>
     </div>
+</div>
 
-    <main class="content">
-    <div class="card center">
-            <button class="producto">Despensa</button>
-            <button class="producto">Bienestar</button>
-            <button class="producto">Hogar</button>
-            <button class="producto">Niños</button>  
-        </div>    
-    </div>   
+<div class="toast" id="toast-admin"></div>
 </div>
-</main>
-</div>
-</div>
-</body>
-</html>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/productos_admin.js') }}"></script>
+{% endblock %}

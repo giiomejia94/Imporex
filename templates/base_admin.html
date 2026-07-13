@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block titulo %}Imporex{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block estilos %}{% endblock %}
+</head>
+<body>
+
+<header class="header">
+    <img src="{{ url_for('static', filename='img/logo.jpg') }}">
+    <input class="search" type="text" placeholder="Buscar por código o nombre de producto y pedido">
+    <div class="user-badge">
+        <div class="dropdown">
+            <div class="user-badge-inner">
+                <img id="headerFotoUsuario"
+                    src="{% if session.get('foto_perfil') %}/{{ session['foto_perfil'] }}{% else %}{{ url_for('static', filename='img/avatar_default.png') }}{% endif %}"
+                    alt="foto"
+                    class="header-avatar"
+                    onerror="this.src='/static/img/avatar_default.png'">
+                <span>Hola, {{ session.get('nombre', session.get('username', '')) }}</span>
+                <button class="dropbtn">▼</button>
+            </div>
+            <div class="dropdown-content">
+                <a href="#" id="btnAbrirPerfil">Perfil</a>
+                <a href="{{ url_for('logout') }}" class="logout">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="layout">
+    <aside class="sidebar sidebar-admin">
+        <div class="menu-lateral">
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('home_admin') }}" {% if request.endpoint == 'home_admin' %}class="active"{% endif %}> Inicio</a></li>
+                    <li><a href="{{ url_for('pedidos_admin') }}" {% if request.endpoint == 'pedidos_admin' %}class="active"{% endif %}> Pedidos</a></li>
+                    <li><a href="{{ url_for('productos_admin') }}" {% if request.endpoint == 'productos_admin' %}class="active"{% endif %}> Productos</a></li>
+                    <li><a href="{{ url_for('pedidos_progra_admin') }}" {% if request.endpoint == 'pedidos_progra_admin' %}class="active"{% endif %}> Prog. Pedidos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <main>
+    {% block contenido %}{% endblock %}
+    </main>
+</div>
+
+{% include '_perfil_modal.html' %}
+<div id="toast" class="toast" style="display:none;"></div>
+
+<script src="{{ url_for('static', filename='js/perfil.js') }}"></script>
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

@@ -1,54 +1,17 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>productos_cliente</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}">
-</head>
-<body>
+{% extends 'base_cliente.html' %}
 
-<header class="header">
-    <img src="{{ url_for('static', filename='img/logo.jpg')}}">
-    <input class="search" type="text" placeholder="Buscar por código o nombre de producto y pedido">
-    <div class="user-badge">
-        <div class="dropdown">
-            <span>Hola, Giovanny</span>
-            <button class="dropbtn"> ▼ </button>
-            <div class="dropdown-content">
-                <a href="#">Perfil</a>
-                <a href="logout" class="logout">Cerrar sesión</a>
-            </div>
-        </div>
-        
-    </div>
-</header>
-<div class="layout">
-    <aside class="sidebar">
-        <div class="menu-lateral">
-            <nav>
-                <ul>
-                    <li><a href='inicio'>Inicio</a></li>
-                    <li><a href='pedidos_cliente'>Pedidos</a></li>
-                    <li><a href='productos_cliente'>Productos</a></li>
-                    <li><a href='pedidos_progra_cliente'>Pedidos Programados</a></li>
-                </ul>
-            </nav>
-        </div>
-    </aside>
-    <main class="content">
-        <div class="productos-cliente">
-            <div class="card center">
-            <button class="producto">Despensa</button>
-            <button class="producto">Bienestar</button>
-            <button class="producto">Hogar</button>
-            <button class="producto">Niños</button>  
-        </div>
+{% block titulo %}Productos – Imporex{% endblock %}
+
+{% block contenido %}
+<div class="productos-cliente">
     <div class="card center">
-            <span>estado de mi pedido</span>
-            </div>
-        </div>
-    </main>
+        <button class="producto">Despensa</button>
+        <button class="producto">Bienestar</button>
+        <button class="producto">Hogar</button>
+        <button class="producto">Niños</button>
+    </div>
+    <div class="card center">
+        <span>Estado de mi pedido</span>
+    </div>
 </div>
-</div>
-</body>
-</html>
+{% endblock %}

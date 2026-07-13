@@ -14,18 +14,30 @@
 <main class="container">
     <div class="form-box">
         <h3>Registro de Usuario</h3>
-        <form method="post">
-            <label>Usuario</label>
-            <input type="text" placeholder="Ingrese usuario" id="username" name="username" required>
-            <label>Nombre</label>
-            <input type="text" id="nombre"  name="nombre" placeholder="Ingrese Nombre completo" required>
-            <label>Contraseña</label>
-            <input type="password" id="password" name="password" placeholder="Ingrese cotraseña" required>
-            <label>Correo</label>
-            <input type="email" id="correo" name="correo" placeholder="Ingrese correo">
-            
-            <button class="btn-register" href="registro" type="submit">Registrarme</button>
-        </form> 
+        {% if error %}
+    <div class="error-box">
+        <span class="msg-error">{{ error }}</span>
+    </div>
+    {% endif %}
+
+    <form method="post">
+        <label>Usuario</label>
+        <input type="text" placeholder="Ingrese usuario" id="username" name="username"
+            value="{{ username_val }}" required>
+
+        <label>Nombre</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Ingrese Nombre completo"
+            value="{{ nombre_val }}" required>
+
+        <label>Contraseña</label>
+        <input type="password" id="password" name="password" placeholder="Ingrese contraseña" required>
+
+        <label>Correo</label>
+        <input type="email" id="correo" name="correo" placeholder="Ingrese correo"
+            value="{{ correo_val }}" required>
+
+        <button class="btn-register" type="submit">Registrarme</button>
+    </form>
         
     </div>   
 </main>
