@@ -8,7 +8,7 @@ app.secret_key = 'tu_clave_secreta'
 # Configuración de MySQL
 app.config['MYSQL_HOST'] = '127.0.0.1'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '1098762558Gm'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'imporex'
 
 mysql = MySQL(app)
