@@ -1,151 +1,223 @@
 {% extends 'base_admin.html' %}
 
-{% block titulo %}Pedidos Programados – Admin Imporex{% endblock %}
+{% block titulo %}Pedidos programados – Admin Imporex{% endblock %}
 
 {% block contenido %}
 
-<div class="content-progradmin">
-    <div>
-        <h1>Pedidos Programados</h1>
-        <p>Gestión de despachos programados marítimos y aéreos</p>
+    <div class="content-pedidosadmin">
+            <div class="page-titlepedidosadmin">📦 Gestión de Pedidos Programados</div>
+            <div class="section-label">Crear nuevo pedido</div>
+            
+            <!-- ===== Crear pedido programado: Contenedor / Aéreo ===== -->
+            <div class="order-optionspedidos">
+                <div class="order-box" id="btnCrearMaritimo">
+                    <div class="pedido-info">
+                        <div class="icono-boxprogra">
+                            <img src="{{ url_for('static', filename='img/icon_contenedor.png') }}" alt="Contenedor">
+                            <strong>Pedido Marítimo</strong>
+                            <span>Contenedor/pallets</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-box" id="btnCrearAereo">
+                    <div class="pedido-info">
+                        <div class="icono-boxprogra">
+                            <img src="{{ url_for('static', filename='img/icon_aereo.png') }}" alt="Aéreo">
+                            <strong>Pedido Aéreo</strong>
+                            <span>Envio por Avión</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- ====== Historial de pedidos programados ====== -->
+    <div class="historial-header">
+        <div class="section-label" style="margin-bottom:0">Historial de pedidos programados</div>
+        <div class="filtros">
+            <select id="filtro-tipo-progra" onchange="aplicarFiltrosProgramados()">
+                <option value="">Todos los tipos</option>
+                <option value="maritimo">Marítimo</option>
+                <option value="aereo">Aéreo</option>
+            </select>
+            <select id="filtro-estado-progra" onchange="aplicarFiltrosProgramados()">
+                <option value="">Todos los estados</option>
+                <option value="Abierto">Abierto</option>
+                <option value="Cerrado">Cerrado</option>
+            </select>
+        </div>
     </div>
-    <button class="btn btn-primary"
-        onclick="document.getElementById('modalNuevoDespacho').classList.add('show')">
-        ＋ Nuevo despacho
+
+    <div id="lista-programados">
+        <!-- Se renderiza por JS -->
+    </div>
+</div>
+
+<!-- CATÁLOGO DE PRODUCTOS -->
+<div class="modal-overlay" id="catalogoOverlay">
+    <div class="catalogo-box">
+        <div class="catalogo-header">
+            <h3>🛍 Catálogo de productos</h3>
+            <button class="detalle-close" onclick="cerrarCatalogo()">×</button>
+        </div>
+        <div class="catalogo-tabs" id="catalogo-tabs"></div>
+        <div id="catalogo-contenido">
+            <div class="empty-state"><div class="empty-icon">⏳</div><p>Cargando productos...</p></div>
+        </div>
+        <div class="catalogo-footer">
+            <button class="btn-confirmar-productos" onclick="confirmarProductos()">✓ Confirmar productos</button>
+            <button id="btn-confirmar-pallet-admin" class="btn-confirmar-productos" style="display:none;" onclick="pedirComentarioDistribucion()">
+        📦 Confirmar pallet
     </button>
+        </div>
+    </div>
 </div>
 
-<!-- Despachos disponibles -->
-<div class="card">
-    <div class="card-title">Despachos activos</div>
-    <div class="table-wrapper">
+<!-- MODAL DETALLE ESTIBADO -->
+<div class="modal-overlay" id="modalDetalleOverlay">
+    <div class="detalle-box">
+        <div class="detalle-header">
+            <button class="detalle-close" onclick="cerrarDetalleProducto()">×</button>
+        </div>
+        <div class="detalle-grid">
+            <div class="detalle-producto-card">
+                <div id="detalle-codigo"></div>
+                <div id="detalle-imagen">📦</div>
+                <div id="detalle-nombre"></div>
+                <div id="detalle-presentacion"></div>
+                <div id="detalle-precio"></div>
+            </div>
+            <div class="detalle-estibado">
+                <h4>Detalle del estibado</h4>
+                <div class="estibado-dato">
+                    <div class="label">Peso por pack</div>
+                    <div class="valor" id="detalle-peso-pack">—</div>
+                </div>
+                <div class="estibado-dato">
+                    <div class="label">Cantidad por tendido</div>
+                    <div class="valor" id="detalle-cant-tendido">—</div>
+                </div>
+                <div class="estibado-dato">
+                    <div class="label">Cantidad máxima</div>
+                    <div class="valor" id="detalle-cant-maxima">—</div>
+                </div>
+                <div class="cantidad-control">
+                    <label>Cantidad de packs a agregar</label>
+                    <input type="number" id="cantidad-agregar" min="1" value="1">
+                </div>
+            </div>
+            <div class="detalle-distribucion">
+                <h4 id="titulo-distribucion">Distribución pallets</h4>
+                <div id="visual-pallet">
+                    <div class="pallet-celda"></div><div class="pallet-celda"></div>
+                    <div class="pallet-celda" style="grid-row:span 3;"></div>
+                    <div class="pallet-celda"></div><div class="pallet-celda"></div>
+                    <div class="pallet-celda"></div><div class="pallet-celda"></div>
+                </div>
+                <div id="visual-aereo">
+                    <div class="caja-aerea">✈️ 📦</div>
+                    <div class="caja-aerea">✈️ 📦</div>
+                    <div class="caja-aerea">✈️ 📦</div>
+                </div>
+            </div>
+        </div>
+        <div class="detalle-footer">
+            <button class="btn-agregar-detalle" id="btn-agregar-detalle" onclick="agregarAlCarrito()">
+                🚢 Agregar al contenedor
+            </button>
+        </div>
+    </div>
+</div>
+<!-- Modal Crear pedido programado -->
+<div id="modalPedidoPrograma" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+        <h3 id="modalProgramaTitulo">Crear pedido programado</h3>
+        <form id="formPedidoPrograma">
+            <input type="hidden" id="programaTipo" name="tipo">
+
+            <label>Fecha de envío</label>
+            <input type="date" id="programaFecha" name="fecha_envio" required>
+
+            <label>Destino</label>
+            <input type="text" id="programaDestino" name="destino" placeholder="Ej. Miami, FL" required>
+
+            <label>Pallets disponibles</label>
+            <input type="number" id="programaPallets" name="pallets_totales" min="1" required>
+
+            <div class="modal-acciones">
+                <button type="submit" class="btn-primary">Crear</button>
+                <button type="button" id="btnCerrarModalPrograma" class="btn-login">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: grid de 20 pallets (vista admin) -->
+<div class="modal-overlay" id="modalPalletsAdminOverlay">
+    <div class="modal-box pallets-box">
+        <h3>Distribución del contenedor</h3>
+        <img src="/static/img/icon_contenedor.png" alt="Contenedor" class="contenedor-icono-3d">
+        <div id="grid-pallets-admin" class="grid-pallets"></div>
+        <div class="pallets-disponibles-contador">
+            Pallets Disponibles: <span id="contadorPalletsDisponibles">—</span>
+        </div>
+        <div class="modal-acciones">
+            <button type="button" onclick="document.getElementById('modalPalletsAdminOverlay').classList.remove('visible')" class="btn-login">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: elegir cliente antes de abrir el catálogo -->
+<div class="modal-overlay" id="modalClienteReservaOverlay">
+    <div class="modal-box">
+        <h3>Reservar pallet #<span id="numeroPalletSeleccionado"></span></h3>
+        <label>Cliente</label>
+        <select id="selectClienteReserva">
+            <option value="">Seleccionar cliente...</option>
+        </select>
+        <div class="modal-acciones">
+            <button type="button" class="btn-primary" onclick="continuarAReservaCatalogo()">Continuar</button>
+            <button type="button" class="btn-login" onclick="document.getElementById('modalClienteReservaOverlay').classList.remove('visible')">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: comentario de distribución antes de confirmar -->
+<div class="modal-overlay" id="modalComentarioOverlay">
+    <div class="modal-box">
+        <h3>Describe la distribución</h3>
+        <label>Comentario (obligatorio)</label>
+        <textarea id="comentarioDistribucion" rows="3" placeholder="Ej. 40 packs de arroz en la base, 40 de harina arriba..."></textarea>
+        <div class="modal-acciones">
+            <button type="button" class="btn-primary" onclick="confirmarReservaAdmin()">Confirmar pallet</button>
+            <button type="button" class="btn-login" onclick="document.getElementById('modalComentarioOverlay').classList.remove('visible')">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: ver contenido de un pallet ya ocupado -->
+<div class="modal-overlay" id="modalDetallePalletOverlay">
+    <div class="modal-box">
+        <h3>Pallet #<span id="detallePalletNumero"></span> — <span id="detallePalletCliente"></span></h3>
         <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tipo</th>
-                    <th>Fecha despacho</th>
-                    <th>Cupos disponibles</th>
-                    <th>Clientes inscritos</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for despacho in despachos %}
-                <tr>
-                    <td><strong>{{ despacho['id'] }}</strong></td>
-                    <td>{{ '🚢 Marítimo' if despacho['tipo'] == 'maritimo' else '✈️ Aéreo' }}</td>
-                    <td>{{ despacho['fecha'] }}</td>
-                    <td>{{ despacho['cupos'] }}</td>
-                    <td>{{ despacho['inscritos'] }}</td>
-                    <td><span class="badge {{ despacho['estado']|lower }}">{{ despacho['estado'] }}</span></td>
-                    <td>
-                        <button class="action-btn" title="Ver inscritos">👥</button>
-                        <button class="action-btn" title="Editar">✏️</button>
-                        <button class="action-btn" title="Eliminar" style="color:red">🗑</button>
-                    </td>
-                </tr>
-                {% else %}
-                <!-- Datos de ejemplo -->
-                <tr>
-                    <td><strong>DSP-001</strong></td>
-                    <td>🚢 Marítimo</td>
-                    <td>15-Enero-2026</td>
-                    <td>40 pallets</td>
-                    <td>3</td>
-                    <td><span class="badge activo">Activo</span></td>
-                    <td>
-                        <button class="action-btn">👥</button>
-                        <button class="action-btn">✏️</button>
-                        <button class="action-btn" style="color:red">🗑</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>DSP-002</strong></td>
-                    <td>✈️ Aéreo</td>
-                    <td>25-Enero-2026</td>
-                    <td>10 espacios</td>
-                    <td>1</td>
-                    <td><span class="badge activo">Activo</span></td>
-                    <td>
-                        <button class="action-btn">👥</button>
-                        <button class="action-btn">✏️</button>
-                        <button class="action-btn" style="color:red">🗑</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>DSP-003</strong></td>
-                    <td>🚢 Marítimo</td>
-                    <td>29-Febrero-2026</td>
-                    <td>40 pallets</td>
-                    <td>0</td>
-                    <td><span class="badge activo">Activo</span></td>
-                    <td>
-                        <button class="action-btn">👥</button>
-                        <button class="action-btn">✏️</button>
-                        <button class="action-btn" style="color:red">🗑</button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
+            <thead><tr><th>Código</th><th>Producto</th><th>Cantidad</th></tr></thead>
+            <tbody id="tablaDetallePallet"></tbody>
         </table>
+        <p><strong>Comentario:</strong> <span id="detallePalletComentario">—</span></p>
+        <div class="modal-acciones">
+            <button type="button" class="btn-login" onclick="document.getElementById('modalDetallePalletOverlay').classList.remove('visible')">Cerrar</button>
+        </div>
     </div>
 </div>
 
-<!-- Modal Nuevo Despacho -->
-<div class="modal-overlay" id="modalNuevoDespacho">
-    <div class="modal">
-        <button class="modal-close"
-            onclick="document.getElementById('modalNuevoDespacho').classList.remove('show')">✕</button>
-        <h3>Crear nuevo despacho</h3>
-        <div class="form-grid">
-            <div class="form-group">
-                <label>Tipo de envío</label>
-                <select>
-                    <option value="maritimo">🚢 Marítimo</option>
-                    <option value="aereo">✈️ Aéreo</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Fecha de despacho</label>
-                <input type="date">
-            </div>
-            <div class="form-group">
-                <label>Cupos disponibles</label>
-                <input type="number" min="1" placeholder="Ej. 40">
-            </div>
-            <div class="form-group">
-                <label>Puerto de origen</label>
-                <input type="text" placeholder="Ej. Buenaventura, Colombia">
-            </div>
-            <div class="form-group">
-                <label>Puerto de destino</label>
-                <input type="text" placeholder="Ej. Callao, Perú">
-            </div>
-            <div class="form-group">
-                <label>Naviera / Aerolínea</label>
-                <input type="text" placeholder="Ej. Maersk, Avianca Cargo">
-            </div>
-            <div class="form-group" style="grid-column:1/-1">
-                <label>Observaciones</label>
-                <textarea placeholder="Condiciones especiales, requisitos..."></textarea>
-            </div>
-        </div>
-        <div class="modal-actions">
-            <button class="btn btn-outline"
-                onclick="document.getElementById('modalNuevoDespacho').classList.remove('show')">Cancelar</button>
-            <button class="btn btn-primary">Crear despacho</button>
-        </div>
-    </div>
-</div>
+<div id="toast" class="toast" style="display:none;"></div>
+
 
 {% endblock %}
 
+{% include '_perfil_modal.html' %}
+
 {% block scripts %}
-<script>
-document.querySelectorAll('.modal-overlay').forEach(m => {
-    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); });
-});
-</script>
+<script src="{{ url_for('static', filename='js/pedidos.js') }}"></script>
+<script src="{{ url_for('static', filename='js/pedidos_progra_admin.js')}}"></script>
 {% endblock %}

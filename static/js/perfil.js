@@ -31,21 +31,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function cargarPerfil() {
-        try {
-            const resp = await fetch('/api/perfil');
-            if (!resp.ok) throw new Error();
-            const datos = await resp.json();
-            perfilUsername.value = datos.username || '';
-            perfilNombre.value   = datos.nombre   || '';
-            perfilCorreo.value   = datos.correo   || '';
-            perfilPassword.value = '';
-            if (datos.foto_perfil) {
-                perfilFotoImg.src = '/' + datos.foto_perfil + '?t=' + Date.now();
-            }
-        } catch {
-            mostrarToast('Error al cargar el perfil', true);
+    try {
+        const resp = await fetch('/api/perfil');
+        if (!resp.ok) throw new Error('No se pudo cargar el perfil');
+        const datos = await resp.json();
+
+        perfilUsername.value = datos.username || '';
+        perfilNombre.value = datos.nombre || '';
+        perfilCorreo.value = datos.correo || '';
+        perfilPassword.value = '';
+
+        if (datos.foto_perfil) {
+            perfilFotoImg.src = '/' + datos.foto_perfil;
         }
+
+        cargarSelectorColores(); // <-- LÍNEA NUEVA
+
+    } catch (err) {
+        mostrarToast('Error al cargar tu perfil', true);
     }
+}
 
     // Abrir modal
     btnAbrirPerfil.addEventListener('click', (e) => {
@@ -138,6 +143,51 @@ if (headerAvatar) headerAvatar.src = '/' + datos.foto_perfil + '?t=' + Date.now(
             dropdownContent.classList.remove('abierto');
         }
     });
+    }
+    
+    async function cargarSelectorColores() {
+    const cont = document.getElementById('selectorColorPallet');
+    if (!cont) return;
+
+    try {
+        const resp = await fetch('/api/perfil/colores');
+        const data = await resp.json();
+
+        cont.innerHTML = data.paleta.map(color => {
+            const esMio = color === data.mi_color;
+            const ocupadoPorOtro = data.ocupados[color] && !esMio;
+            let clase = 'swatch-color';
+            if (esMio) clase += ' seleccionado';
+            if (ocupadoPorOtro) clase += ' ocupado-otro';
+
+            return `<div class="${clase}" style="background:${color};" data-color="${color}" title="${ocupadoPorOtro ? 'Ya elegido por otro usuario' : ''}"></div>`;
+        }).join('');
+
+        cont.querySelectorAll('.swatch-color:not(.ocupado-otro)').forEach(swatch => {
+            swatch.addEventListener('click', () => elegirColorPallet(swatch.dataset.color));
+        });
+    } catch (err) {
+        cont.innerHTML = '<p class="empty-msg">No se pudieron cargar los colores</p>';
+    }
+    }
+
+    async function elegirColorPallet(color) {
+        try {
+            const resp = await fetch('/api/perfil/color', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ color })
+            });
+            if (!resp.ok) {
+                const data = await resp.json();
+                mostrarToast(data.error || 'No se pudo asignar el color', true);
+                return;
+            }
+            mostrarToast('Color asignado correctamente');
+            cargarSelectorColores();
+        } catch (err) {
+            mostrarToast('Error al asignar el color', true);
+        }
     }
     
     

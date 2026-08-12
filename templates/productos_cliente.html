@@ -4,14 +4,16 @@
 
 {% block contenido %}
 <div class="productos-cliente">
-    <div class="card center">
-        <button class="producto">Despensa</button>
-        <button class="producto">Bienestar</button>
-        <button class="producto">Hogar</button>
-        <button class="producto">Niños</button>
-    </div>
-    <div class="card center">
-        <span>Estado de mi pedido</span>
+    <div class="page-titlepedidosadmin">📓 Catalogo de Productos</div>
+    <!-- Pestañas de categorías -->
+    <div class="catalogo-tabs-bar" id="catalogo-admin-tabs"></div>
+    <!-- Catálogo -->
+        <div id="catalogo-admin-contenido">
+    <div class="empty-state"><div class="empty-icon">⏳</div><p>Cargando productos...</p></div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/productos_admin.js') }}"></script>
 {% endblock %}

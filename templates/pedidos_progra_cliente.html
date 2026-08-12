@@ -78,4 +78,16 @@
     {% endfor %}
 
 </div>
+
+<!-- Modal: Contenedor con 20 pallets -->
+<div id="modalPalletsOverlay" class="modal-overlay">
+    <div class="modal-box pallets-box">
+        <h3>Selecciona un pallet disponible</h3>
+        <p class="campo-opcional">Haz clic en una casilla libre (azul) para elegir el producto que va ahí.</p>
+        <div id="grid-pallets-container" class="grid-pallets"></div>
+        <div class="modal-acciones">
+            <button type="button" id="btnCerrarModalPallets" class="btn-login">Cerrar</button>
+        </div>
+    </div>
+</div>
 {% endblock %}

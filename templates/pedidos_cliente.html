@@ -63,10 +63,6 @@
                     <option>Refrigerado (Reefer)</option>
                 </select>
             </div>
-            <div id="campo-pallets">
-                <label id="label-pallets">Pallets disponibles</label>
-                <input type="number" id="pallets" min="1" max="40" placeholder="Ej. 10">
-            </div>
             <div class="form-full">
                 <label>Observaciones</label>
                 <input type="text" id="observaciones" placeholder="Instrucciones especiales, condiciones de manejo, etc.">
@@ -75,7 +71,7 @@
 
         <div class="agregar-productos-zona">
             <div class="section-label">Productos del pedido</div>
-            <button class="btn-agregar-productos" id="btn-agregar-productos" onclick="abrirCatalogo()">
+            <button class="btn-agregar-productos" id="btn-agregar-productos" onclick="abrirSelectorPalletsPropio()">
                 🛒 Agregar productos
             </button>
             <div id="resumen-productos-wrapper" class="resumen-productos">

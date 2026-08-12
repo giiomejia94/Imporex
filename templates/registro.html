@@ -6,11 +6,9 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}">
 </head>
 <body>
-
 <header class="header">
     <img src="{{ url_for('static', filename='img/logo.jpg')}}">
 </header>
-
 <main class="container">
     <div class="form-box">
         <h3>Registro de Usuario</h3>
@@ -19,28 +17,24 @@
         <span class="msg-error">{{ error }}</span>
     </div>
     {% endif %}
-
     <form method="post">
         <label>Usuario</label>
         <input type="text" placeholder="Ingrese usuario" id="username" name="username"
             value="{{ username_val }}" required>
-
         <label>Nombre</label>
         <input type="text" id="nombre" name="nombre" placeholder="Ingrese Nombre completo"
             value="{{ nombre_val }}" required>
-
         <label>Contraseña</label>
         <input type="password" id="password" name="password" placeholder="Ingrese contraseña" required>
-
         <label>Correo</label>
         <input type="email" id="correo" name="correo" placeholder="Ingrese correo"
             value="{{ correo_val }}" required>
-
         <button class="btn-register" type="submit">Registrarme</button>
-    </form>
         
-    </div>   
+    </form> 
+<a class="btn-volver" href="javascript:history.back()">← Volver</a>   
+    </div>
+    
 </main>
-
 </body>
 </html>

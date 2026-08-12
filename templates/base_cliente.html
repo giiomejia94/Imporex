@@ -10,7 +10,6 @@
 
 <header class="header">
     <img src="{{ url_for('static', filename='img/logo.jpg') }}">
-    <input class="search" type="text" placeholder="Buscar por código o nombre de producto y pedido">
     <div class="user-badge">
         <div class="dropdown">
             <div class="user-badge-inner">
@@ -30,7 +29,7 @@
     </div>
 </header>
 
-<div class="layout">
+<div class="layoutcliente">
     <aside class="sidebar">
         <div class="menu-lateral">
             <nav>
@@ -107,7 +106,10 @@
 
             <label>Nueva contraseña <span class="campo-opcional">(dejar en blanco para no cambiar)</span></label>
             <input type="password" id="perfilPassword" name="password" placeholder="••••••••" disabled>
-
+            
+            <label>Color para pallets — Pedido Programado</label>
+            <div id="selectorColorPallet" class="selector-colores"></div>
+            
             <!-- SIN campo Rol — solo admin puede cambiarlo -->
 
             <div class="modal-acciones">

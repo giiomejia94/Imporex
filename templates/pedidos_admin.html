@@ -4,24 +4,24 @@
 
 {% block contenido %}
 <div class="content-pedidosadmin">
-    <div class="page-title">📦 Gestión de Pedidos</div>
+    <div class="page-titlepedidosadmin">📦 Gestión de Pedidos</div>
 
-    <!-- ====== INICIAR PEDIDO ====== -->
+    <!-- ====== INICIAR PEDIDO  ====== -->
     <div class="section-label">Crear nuevo pedido</div>
-    <div class="order-options">
-        <div class="order-box" id="box-maritimo" onclick="seleccionarTipo('maritimo')">
-            <div class="icon">🚢</div>
-            <strong>Pedido Marítimo</strong>
-            <span>Contenedor / pallets</span>
-        </div>
-        <div class="order-box" id="box-aereo" onclick="seleccionarTipo('aereo')">
-            <div class="icon">✈️</div>
-            <strong>Pedido Aéreo</strong>
-            <span>Envío rápido por avión</span>
-        </div>
+    <div class="order-optionspedidos">
+    <div class="order-box" id="box-maritimo" onclick="seleccionarTipo('maritimo')">
+        <img src="{{ url_for('static', filename='img/icon_contenedor.png') }}" alt="Marítimo" class="order-icon">
+        <strong>Pedido Marítimo</strong>
+        <span>Contenedor / pallets</span>
     </div>
+    <div class="order-box" id="box-aereo" onclick="seleccionarTipo('aereo')">
+        <img src="{{ url_for('static', filename='img/icon_aereo.png') }}" alt="Aéreo" class="order-icon">
+        <strong>Pedido Aéreo</strong>
+        <span>Envío por avión</span>
+    </div>
+</div>
 
-    <!-- Formulario nuevo pedido -->
+<!-- Formulario nuevo pedido -->
     <div class="nuevo-pedido-form" id="formularioPedido">
         <div class="form-title">
             <span id="form-icon">📋</span>
@@ -78,10 +78,6 @@
                     <option>Refrigerado (Reefer)</option>
                 </select>
             </div>
-            <div id="campo-pallets">
-                <label id="label-pallets">Pallets disponibles</label>
-                <input type="number" id="pallets" min="1" max="40" placeholder="Ej. 10">
-            </div>
             <div class="form-full">
                 <label>Observaciones</label>
                 <input type="text" id="observaciones"
@@ -91,13 +87,14 @@
 
         <div class="agregar-productos-zona">
             <div class="section-label">Productos del pedido</div>
-            <button class="btn-agregar-productos" id="btn-agregar-productos" onclick="abrirCatalogo()">
+            <button class="btn-agregar-productos" id="btn-agregar-productos" onclick="abrirSelectorPalletsPropio()">
                 🛒 Agregar productos
             </button>
             <div id="resumen-productos-wrapper" class="resumen-productos">
                 <table>
                     <thead>
                         <tr>
+                            <th>Pallet</th>
                             <th>Código</th><th>Producto</th><th>Presentación</th>
                             <th>Cantidad</th><th>Peso total</th><th></th>
                         </tr>
@@ -115,7 +112,7 @@
 
     <!-- ====== HISTORIAL TODOS LOS CLIENTES ====== -->
     <div class="historial-header">
-        <div class="section-label" style="margin-bottom:0">Historial de pedidos — todos los clientes</div>
+        <div class="section-label" style="margin-bottom:0">Historial de pedidos</div>
         <div class="filtros">
             <!-- Filtro por cliente — exclusivo admin -->
             <select id="filtro-cliente" onchange="aplicarFiltros()">
@@ -162,6 +159,21 @@
     </div>
 </div>
 
+<!-- Modal: elegir pallet propio (contenedor 100% del cliente) -->
+<div class="modal-overlay" id="modalSelectorPalletsPropio">
+    <div class="modal-box pallets-box">
+        <h3>Elige dónde va este producto</h3>
+        <img src="/static/img/icon_contenedor.png" alt="Contenedor" class="contenedor-icono-3d">
+        <div id="grid-pallets-propio" class="grid-pallets"></div>
+        <button type="button" class="btn-primary" style="margin-top:14px; width:100%;" onclick="agregarProductoSuelto()">
+            📦 Producto suelto (sin pallet)
+        </button>
+        <div class="modal-acciones">
+            <button type="button" class="btn-login" onclick="document.getElementById('modalSelectorPalletsPropio').classList.remove('visible')">Cerrar</button>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL DETALLE ESTIBADO -->
 <div class="modal-overlay" id="modalDetalleOverlay">
     <div class="detalle-box">
@@ -194,9 +206,16 @@
                     <label>Cantidad de packs a agregar</label>
                     <input type="number" id="cantidad-agregar" min="1" value="1">
                 </div>
+                <div class="cantidad-control" id="control-dejar-abierto" style="margin-top:10px;">
+                    <label style="display:flex; align-items:center; gap:8px; font-weight:normal;">
+                        <input type="checkbox" id="dejar-pallet-abierto">
+                        Dejar este pallet abierto para agregar más productos
+                    </label>
+                </div>
             </div>
             <div class="detalle-distribucion">
                 <h4 id="titulo-distribucion">Distribución pallets</h4>
+                <img id="imagen-estiba" src="" alt="Distribución del pallet" style="display:none; max-width:100%; border-radius:8px;">
                 <div id="visual-pallet">
                     <div class="pallet-celda"></div><div class="pallet-celda"></div>
                     <div class="pallet-celda" style="grid-row:span 3;"></div>
@@ -207,6 +226,10 @@
                     <div class="caja-aerea">✈️ 📦</div>
                     <div class="caja-aerea">✈️ 📦</div>
                     <div class="caja-aerea">✈️ 📦</div>
+                </div>
+                <div class="estibado-dato" style="margin-top:10px;">
+                    <div class="label">Apto para remonte</div>
+                    <div class="valor" id="detalle-apto-remonte">—</div>
                 </div>
             </div>
         </div>

@@ -7,10 +7,9 @@
     {% block estilos %}{% endblock %}
 </head>
 <body>
-
+<!-- emcabezado  -->
 <header class="header">
     <img src="{{ url_for('static', filename='img/logo.jpg') }}">
-    <input class="search" type="text" placeholder="Buscar por código o nombre de producto y pedido">
     <div class="user-badge">
         <div class="dropdown">
             <div class="user-badge-inner">
@@ -30,6 +29,8 @@
     </div>
 </header>
 
+<!-- menú lateral  -->
+
 <div class="layout">
     <aside class="sidebar sidebar-admin">
         <div class="menu-lateral">
@@ -47,6 +48,27 @@
     <main>
     {% block contenido %}{% endblock %}
     </main>
+</div>
+<!-- Modal: participantes de un despacho -->
+<div class="modal-overlay" id="modalParticipantesOverlay">
+    <div class="modal-box">
+        <h3>Participantes del despacho</h3>
+        <div id="lista-participantes"></div>
+        <div class="modal-acciones">
+            <button type="button" class="btn-login" onclick="document.getElementById('modalParticipantesOverlay').classList.remove('visible')">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: verificación de productos por pallet -->
+<div class="modal-overlay" id="modalVerificacionOverlay">
+    <div class="modal-box" style="width:500px;">
+        <h3 id="verificacionTitulo">Verificar pedido</h3>
+        <div id="contenido-verificacion" style="max-height:400px; overflow-y:auto;"></div>
+        <div class="modal-acciones">
+            <button type="button" class="btn-login" onclick="document.getElementById('modalVerificacionOverlay').classList.remove('visible')">Cerrar</button>
+        </div>
+    </div>
 </div>
 
 {% include '_perfil_modal.html' %}
