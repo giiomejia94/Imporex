@@ -1,113 +1,93 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Pedidos-programados</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}">
-</head>
-<body>
+{% extends 'base_cliente.html' %}
 
-<header class="header">
-    <img src="{{ url_for('static', filename='img/logo.jpg')}}">
-    <input class="search" type="text" placeholder="Buscar por código o nombre de producto y pedido">
-    <div class="user-badge">
-        
-        <div class="dropdown">
-            <span>Hola, Giovanny</span>
-            <button class="dropbtn"> ▼ </button>
-            <div class="dropdown-content">
-                <a href="#">Perfil</a>
-                <a href="logout" class="logout">Cerrar sesión</a>
+{% block titulo %}Pedidos Programados – Imporex{% endblock %}
+
+{% block contenido %}
+<div class="page-title">🔁 Pedidos Programados</div>
+<div class="section-label">Despachos disponibles para participar</div>
+
+<div class="pedidos-cliente">
+
+    {% for despacho in despachos %}
+    <div class="pedido-card">
+        <div class="pedido-info">
+            <div class="order-box">
+                <div class="icon">{{ '🚢' if despacho['tipo'] == 'maritimo' else '✈️' }}</div>
+                <span>{{ 'Contenedor' if despacho['tipo'] == 'maritimo' else 'Aéreo' }}</span>
             </div>
+            <div class="fecha">{{ despacho['fecha'] }}</div>
         </div>
-
+        <button class="btn-participar" onclick="participar({{ despacho['id'] }})">Participar</button>
     </div>
-</header>
-
-<div class="layout">
-
-    <aside class="sidebar">
-        <div class="menu-lateral">
-            <nav>
-                <ul>
-                    <li><a href='inicio'>Inicio</a></li>
-                    <li><a href='pedidos_cliente'>Pedidos</a></li>
-                    <li><a href='productos_cliente'>Productos</a></li>
-                    <li><a href='pedidos_progra_cliente'>Pedidos Programados</a></li>
-                </ul>
-            </nav>
-        </div>
-    </aside>
-
-    <!-- Área central -->
-    <main class="content">
-        <div class="pedidos-container">
-        <div class="pedido-card">
+    {% else %}
+    <!-- Datos de ejemplo mientras se conecta la BD -->
+    <div class="pedido-card">
         <div class="pedido-info">
             <div class="order-box">
                 <div class="icon">🚢</div>
                 <span>Contenedor</span>
             </div>
-            
             <div class="fecha">15-Enero-2026</div>
         </div>
         <button class="btn-participar">Participar</button>
-        </div>
-        
-        <div class="pedidos-container">
-        <div class="pedido-card">
+    </div>
+
+    <div class="pedido-card">
         <div class="pedido-info">
             <div class="order-box">
                 <div class="icon">✈️</div>
                 <span>Aéreo</span>
             </div>
-            
             <div class="fecha">25-Enero-2026</div>
         </div>
         <button class="btn-participar">Participar</button>
-        </div>
+    </div>
 
-        <div class="pedidos-container">
-        <div class="pedido-card">
+    <div class="pedido-card">
         <div class="pedido-info">
             <div class="order-box">
                 <div class="icon">🚢</div>
                 <span>Contenedor</span>
             </div>
-            
-            <div class="fecha">29-febrero-2026</div>
+            <div class="fecha">29-Febrero-2026</div>
         </div>
         <button class="btn-participar">Participar</button>
-        </div>
+    </div>
 
-        <div class="pedidos-container">
-        <div class="pedido-card">
+    <div class="pedido-card">
         <div class="pedido-info">
             <div class="order-box">
                 <div class="icon">✈️</div>
                 <span>Aéreo</span>
             </div>
-            
-            <div class="fecha">25-febrero-2026</div>
+            <div class="fecha">25-Febrero-2026</div>
         </div>
         <button class="btn-participar">Participar</button>
-        </div>
-        <div class="pedidos-container">
-        <div class="pedido-card">
+    </div>
+
+    <div class="pedido-card">
         <div class="pedido-info">
             <div class="order-box">
                 <div class="icon">✈️</div>
                 <span>Aéreo</span>
             </div>
-            
-            <div class="fecha">29-febrero-2026</div>
+            <div class="fecha">29-Febrero-2026</div>
         </div>
         <button class="btn-participar">Participar</button>
-        </div>
+    </div>
+    {% endfor %}
 
-
-    </main>
 </div>
 
-</body>
-</html>
+<!-- Modal: Contenedor con 20 pallets -->
+<div id="modalPalletsOverlay" class="modal-overlay">
+    <div class="modal-box pallets-box">
+        <h3>Selecciona un pallet disponible</h3>
+        <p class="campo-opcional">Haz clic en una casilla libre (azul) para elegir el producto que va ahí.</p>
+        <div id="grid-pallets-container" class="grid-pallets"></div>
+        <div class="modal-acciones">
+            <button type="button" id="btnCerrarModalPallets" class="btn-login">Cerrar</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

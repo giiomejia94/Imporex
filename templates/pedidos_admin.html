@@ -1,47 +1,250 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>pedidos_admin</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}">
-</head>
-<body>
+{% extends 'base_admin.html' %}
 
-<header class="header">
-    <img src="{{ url_for('static', filename='img/logo.jpg')}}">
-    <input class="search" type="text" placeholder="Buscar por código o nombre de producto y pedido">
-    <div class="user-badge">
-        <span>Hola, Giovanny</span>
+{% block titulo %}Pedidos – Admin Imporex{% endblock %}
+
+{% block contenido %}
+<div class="content-pedidosadmin">
+    <div class="page-titlepedidosadmin">📦 Gestión de Pedidos</div>
+
+    <!-- ====== INICIAR PEDIDO  ====== -->
+    <div class="section-label">Crear nuevo pedido</div>
+    <div class="order-optionspedidos">
+    <div class="order-box" id="box-maritimo" onclick="seleccionarTipo('maritimo')">
+        <img src="{{ url_for('static', filename='img/icon_contenedor.png') }}" alt="Marítimo" class="order-icon">
+        <strong>Pedido Marítimo</strong>
+        <span>Contenedor / pallets</span>
     </div>
-</header>
-<div class="layout">
-    <aside class="sidebar">
-        <div class="menu-lateral">
-            <nav>
-                <ul>
-                    <li><a href='inicio'>Inicio</a></li>
-                    <li><a href='pedidos_cliente'>Pedidos</a></li>
-                    <li><a href='productos_cliente'>Productos</a></li>
-                    <li><a href='pedidos_progra_cliente'>Pedidos Programados</a></li>
-                </ul>
-            </nav>
+    <div class="order-box" id="box-aereo" onclick="seleccionarTipo('aereo')">
+        <img src="{{ url_for('static', filename='img/icon_aereo.png') }}" alt="Aéreo" class="order-icon">
+        <strong>Pedido Aéreo</strong>
+        <span>Envío por avión</span>
+    </div>
+</div>
+
+<!-- Formulario nuevo pedido -->
+    <div class="nuevo-pedido-form" id="formularioPedido">
+        <div class="form-title">
+            <span id="form-icon">📋</span>
+            <span id="form-titulo">Nuevo Pedido</span>
         </div>
-    </aside>
-    <main class="content">
-    <div class="card center">
-        <span>Usuarios</span>
-        
+        <div class="form-grid">
+
+            <!-- Campo exclusivo admin: seleccionar cliente -->
+            <div class="form-full">
+                <label>Cliente</label>
+                <select id="cliente-select">
+                    <option value="">Seleccionar cliente...</option>
+                    {% for cliente in clientes %}
+                    <option value="{{ cliente['id_usuario'] }}">{{ cliente['nombre'] }}</option>
+                    {% else %}
+                    <option disabled>No hay clientes registrados</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label>Tipo de envío</label>
+                <input type="text" id="tipo-envio-display" readonly
+                    style="background:#eaf4fb; font-weight:bold;">
+            </div>
+            <div>
+                <label>Fecha de envío estimada</label>
+                <input type="date" id="fecha-envio">
+            </div>
+            <div>
+                <label>Destino (ciudad, país)</label>
+                <input type="text" id="destino" placeholder="Miami, Estados Unidos">
+            </div>
+            <div>
+                <label>Orden de compra (referencia)</label>
+                <input type="text" id="orden-compra" placeholder="OC-2026-001">
+                <div class="form-full">
+                    <label>Orden de Compra (OC) — archivo PDF o imagen</label>
+                    <div class="oc-upload-zona" id="oc-upload-zona">
+                        <span id="oc-nombre-archivo">📎 Ningún archivo seleccionado</span>
+                        <input type="file" id="input-archivo-oc" accept=".pdf,.png,.jpg,.jpeg"
+                            onchange="previsualizarOC(this)">
+                        <label for="input-archivo-oc" class="btn-seleccionar-oc">Seleccionar archivo</label>
+                    </div>
+                </div>
+            </div>
+            <div id="campo-contenedor">
+                <label>Tipo de contenedor</label>
+                <select id="tipo-contenedor">
+                    <option value="">Seleccionar...</option>
+                    <option>20 pies estándar</option>
+                    <option>40 pies estándar</option>
+                    <option>40 pies High Cube</option>
+                    <option>Refrigerado (Reefer)</option>
+                </select>
+            </div>
+            <div class="form-full">
+                <label>Observaciones</label>
+                <input type="text" id="observaciones"
+                    placeholder="Instrucciones especiales, condiciones de manejo, etc.">
+            </div>
         </div>
-        <div class="card center">
-        <span>Hola, Giovanny</span>
-        
+
+        <div class="agregar-productos-zona">
+            <div class="section-label">Productos del pedido</div>
+            <button class="btn-agregar-productos" id="btn-agregar-productos" onclick="abrirSelectorPalletsPropio()">
+                🛒 Agregar productos
+            </button>
+            <div id="resumen-productos-wrapper" class="resumen-productos">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pallet</th>
+                            <th>Código</th><th>Producto</th><th>Presentación</th>
+                            <th>Cantidad</th><th>Peso total</th><th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-resumen-productos"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn-cancelar" onclick="cancelarFormulario()">Cancelar</button>
+            <button class="btn-enviar" onclick="enviarPedido()">Crear pedido</button>
         </div>
     </div>
+
+    <!-- ====== HISTORIAL TODOS LOS CLIENTES ====== -->
+    <div class="historial-header">
+        <div class="section-label" style="margin-bottom:0">Historial de pedidos</div>
+        <div class="filtros">
+            <!-- Filtro por cliente — exclusivo admin -->
+            <select id="filtro-cliente" onchange="aplicarFiltros()">
+                <option value="">Todos los clientes</option>
+                {% for cliente in clientes %}
+                <option value="{{ cliente['id_usuario'] }}">{{ cliente['nombre'] }}</option>
+                {% endfor %}
+            </select>
+            <select id="filtro-tipo" onchange="aplicarFiltros()">
+                <option value="">Todos los tipos</option>
+                <option value="Marítimo">Marítimo</option>
+                <option value="Aéreo">Aéreo</option>
+            </select>
+            <select id="filtro-estado" onchange="aplicarFiltros()">
+                <option value="">Todos los estados</option>
+                <option value="Verificado">Verificado</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="En tránsito">En tránsito</option>
+                <option value="Entregado">Entregado</option>
+                <option value="Con observación">Con observación</option>
+            </select>
+        </div>
     </div>
-    
+
+    <div id="lista-pedidos">
+        <!-- Se renderizan por JS igual que en pedidos_cliente -->
+    </div>
 </div>
-</main>
+
+<!-- CATÁLOGO DE PRODUCTOS -->
+<div class="modal-overlay" id="catalogoOverlay">
+    <div class="catalogo-box">
+        <div class="catalogo-header">
+            <h3>🛍 Catálogo de productos</h3>
+            <button class="detalle-close" onclick="cerrarCatalogo()">×</button>
+        </div>
+        <div class="catalogo-tabs" id="catalogo-tabs"></div>
+        <div id="catalogo-contenido">
+            <div class="empty-state"><div class="empty-icon">⏳</div><p>Cargando productos...</p></div>
+        </div>
+        <div class="catalogo-footer">
+            <button class="btn-confirmar-productos" onclick="confirmarProductos()">✓ Confirmar productos</button>
+        </div>
+    </div>
 </div>
+
+<!-- Modal: elegir pallet propio (contenedor 100% del cliente) -->
+<div class="modal-overlay" id="modalSelectorPalletsPropio">
+    <div class="modal-box pallets-box">
+        <h3>Elige dónde va este producto</h3>
+        <img src="/static/img/icon_contenedor.png" alt="Contenedor" class="contenedor-icono-3d">
+        <div id="grid-pallets-propio" class="grid-pallets"></div>
+        <button type="button" class="btn-primary" style="margin-top:14px; width:100%;" onclick="agregarProductoSuelto()">
+            📦 Producto suelto (sin pallet)
+        </button>
+        <div class="modal-acciones">
+            <button type="button" class="btn-login" onclick="document.getElementById('modalSelectorPalletsPropio').classList.remove('visible')">Cerrar</button>
+        </div>
+    </div>
 </div>
-</body>
-</html>
+
+<!-- MODAL DETALLE ESTIBADO -->
+<div class="modal-overlay" id="modalDetalleOverlay">
+    <div class="detalle-box">
+        <div class="detalle-header">
+            <button class="detalle-close" onclick="cerrarDetalleProducto()">×</button>
+        </div>
+        <div class="detalle-grid">
+            <div class="detalle-producto-card">
+                <div id="detalle-codigo"></div>
+                <div id="detalle-imagen">📦</div>
+                <div id="detalle-nombre"></div>
+                <div id="detalle-presentacion"></div>
+                <div id="detalle-precio"></div>
+            </div>
+            <div class="detalle-estibado">
+                <h4>Detalle del estibado</h4>
+                <div class="estibado-dato">
+                    <div class="label">Peso por pack</div>
+                    <div class="valor" id="detalle-peso-pack">—</div>
+                </div>
+                <div class="estibado-dato">
+                    <div class="label">Cantidad por tendido</div>
+                    <div class="valor" id="detalle-cant-tendido">—</div>
+                </div>
+                <div class="estibado-dato">
+                    <div class="label">Cantidad máxima</div>
+                    <div class="valor" id="detalle-cant-maxima">—</div>
+                </div>
+                <div class="cantidad-control">
+                    <label>Cantidad de packs a agregar</label>
+                    <input type="number" id="cantidad-agregar" min="1" value="1">
+                </div>
+                <div class="cantidad-control" id="control-dejar-abierto" style="margin-top:10px;">
+                    <label style="display:flex; align-items:center; gap:8px; font-weight:normal;">
+                        <input type="checkbox" id="dejar-pallet-abierto">
+                        Dejar este pallet abierto para agregar más productos
+                    </label>
+                </div>
+            </div>
+            <div class="detalle-distribucion">
+                <h4 id="titulo-distribucion">Distribución pallets</h4>
+                <img id="imagen-estiba" src="" alt="Distribución del pallet" style="display:none; max-width:100%; border-radius:8px;">
+                <div id="visual-pallet">
+                    <div class="pallet-celda"></div><div class="pallet-celda"></div>
+                    <div class="pallet-celda" style="grid-row:span 3;"></div>
+                    <div class="pallet-celda"></div><div class="pallet-celda"></div>
+                    <div class="pallet-celda"></div><div class="pallet-celda"></div>
+                </div>
+                <div id="visual-aereo">
+                    <div class="caja-aerea">✈️ 📦</div>
+                    <div class="caja-aerea">✈️ 📦</div>
+                    <div class="caja-aerea">✈️ 📦</div>
+                </div>
+                <div class="estibado-dato" style="margin-top:10px;">
+                    <div class="label">Apto para remonte</div>
+                    <div class="valor" id="detalle-apto-remonte">—</div>
+                </div>
+            </div>
+        </div>
+        <div class="detalle-footer">
+            <button class="btn-agregar-detalle" id="btn-agregar-detalle" onclick="agregarAlCarrito()">
+                🚢 Agregar al contenedor
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast">✅ Pedido creado correctamente</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/pedidos.js') }}"></script>
+{% endblock %}

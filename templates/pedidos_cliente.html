@@ -1,65 +1,197 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Pedidos - Cliente</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}">
-</head>
-<body>
+{% extends 'base_cliente.html' %}
 
-<header class="header">
-    <img src="{{ url_for('static', filename='img/logo.jpg')}}">
-    <input class="search" type="text" placeholder="Buscar por código o nombre de producto y pedido">
-    <div class="user-badge">
-        
-        <div class="dropdown">
-            <span>Hola, Giovanny</span>
-            <button class="dropbtn"> ▼ </button>
-            <div class="dropdown-content">
-                <a href="#">Perfil</a>
-                <a href="logout" class="logout">Cerrar sesión</a>
-            </div>
+{% block titulo %}Pedidos – Imporex{% endblock %}
+
+{% block contenido %}
+<div class="pedidos-cliente">
+    <div class="page-title">📦 Mis Pedidos</div>
+
+    <!-- ====== INICIAR PEDIDO ====== -->
+    <div class="section-label">Iniciar nuevo pedido</div>
+    <div class="order-options">
+        <div class="order-box" id="box-maritimo" onclick="seleccionarTipo('maritimo')">
+            <div class="icon">🚢</div>
+            <strong>Pedido Marítimo</strong>
+            <span>Contenedor / pallets</span>
+        </div>
+        <div class="order-box" id="box-aereo" onclick="seleccionarTipo('aereo')">
+            <div class="icon">✈️</div>
+            <strong>Pedido Aéreo</strong>
+            <span>Envío rápido por avión</span>
         </div>
     </div>
-</header>
 
-<div class="layout">
-
-    <aside class="sidebar">
-        <div class="menu-lateral">
-            <nav>
-                <ul>
-                    <li><a href='inicio'>Inicio</a></li>
-                    <li><a href='pedidos_cliente'>Pedidos</a></li>
-                    <li><a href='productos_cliente'>Productos</a></li>
-                    <li><a href='pedidos_progra_cliente'>Pedidos Programados</a></li>
-                </ul>
-            </nav>
+    <!-- Formulario nuevo pedido -->
+    <div class="nuevo-pedido-form" id="formularioPedido">
+        <div class="form-title">
+            <span id="form-icon">📋</span>
+            <span id="form-titulo">Nuevo Pedido</span>
         </div>
-    </aside>
-    <main class="content">
-        <div class="pedidos-cliente">
-        <div class="pedido-card">
-        <div class="pedido-info">
-            <div class="order-box">
-                <div class="icon">🚢</div>
-                <span>Contenedor</span>
+        <div class="form-grid">
+            <div>
+                <label>Tipo de envío</label>
+                <input type="text" id="tipo-envio-display" readonly style="background:#eaf4fb; font-weight:bold;">
             </div>
-            
-            <div class="fecha">15-Enero-2026</div>
-        </div>
-        <button class="btn-participar">Participar</button>
-        </div>
-        <!-- Productos destacados -->
-            <div class="card center">
-            <div class="image-placeholder">🖼️</div>
-            <p><strong>Productos destacados o en oferta</strong></p>
-            <p>•••</p>
+            <div>
+                <label>Fecha de envío estimada</label>
+                <input type="date" id="fecha-envio">
+            </div>
+            <div>
+                <label>Destino (ciudad, país)</label>
+                <input type="text" id="destino" placeholder="Miami, Estados Unidos">
+            </div>
+            <div>
+                <label>Orden de compra (referencia)</label>
+                <input type="text" id="orden-compra" placeholder="OC-2026-001">
+                <div class="form-full">
+                    <label>Orden de Compra (OC) — archivo PDF o imagen</label>
+                    <div class="oc-upload-zona" id="oc-upload-zona">
+                        <span id="oc-nombre-archivo">📎 Ningún archivo seleccionado</span>
+                        <input type="file" id="input-archivo-oc" accept=".pdf,.png,.jpg,.jpeg"
+                            onchange="previsualizarOC(this)">
+                        <label for="input-archivo-oc" class="btn-seleccionar-oc">Seleccionar archivo</label>
+                    </div>
+                </div>
+            </div>
+            <div id="campo-contenedor">
+                <label>Tipo de contenedor</label>
+                <select id="tipo-contenedor">
+                    <option value="">Seleccionar...</option>
+                    <option>20 pies estándar</option>
+                    <option>40 pies estándar</option>
+                    <option>40 pies High Cube</option>
+                    <option>Refrigerado (Reefer)</option>
+                </select>
+            </div>
+            <div class="form-full">
+                <label>Observaciones</label>
+                <input type="text" id="observaciones" placeholder="Instrucciones especiales, condiciones de manejo, etc.">
             </div>
         </div>
-    </main>
 
+        <div class="agregar-productos-zona">
+            <div class="section-label">Productos del pedido</div>
+            <button class="btn-agregar-productos" id="btn-agregar-productos" onclick="abrirSelectorPalletsPropio()">
+                🛒 Agregar productos
+            </button>
+            <div id="resumen-productos-wrapper" class="resumen-productos">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Código</th><th>Producto</th><th>Presentación</th>
+                            <th>Cantidad</th><th>Peso total</th><th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-resumen-productos"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn-cancelar" onclick="cancelarFormulario()">Cancelar</button>
+            <button class="btn-enviar" onclick="enviarPedido()">Enviar pedido</button>
+        </div>
+    </div>
+
+    <!-- ====== HISTORIAL ====== -->
+    <div class="historial-header">
+        <div class="section-label" style="margin-bottom:0">Historial de pedidos</div>
+        <div class="filtros">
+            <select id="filtro-tipo" onchange="aplicarFiltros()">
+                <option value="">Todos los tipos</option>
+                <option value="Marítimo">Marítimo</option>
+                <option value="Aéreo">Aéreo</option>
+            </select>
+            <select id="filtro-estado" onchange="aplicarFiltros()">
+                <option value="">Todos los estados</option>
+                <option value="Verificado">Verificado</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="En tránsito">En tránsito</option>
+                <option value="Entregado">Entregado</option>
+                <option value="Con observación">Con observación</option>
+            </select>
+        </div>
+    </div>
+    <div id="lista-pedidos"></div>
 </div>
 
-</body>
-</html>
+<!-- CATÁLOGO DE PRODUCTOS -->
+<div class="modal-overlay" id="catalogoOverlay">
+    <div class="catalogo-box">
+        <div class="catalogo-header">
+            <h3>🛍 Catálogo de productos</h3>
+            <button class="detalle-close" onclick="cerrarCatalogo()">×</button>
+        </div>
+        <div class="catalogo-tabs" id="catalogo-tabs"></div>
+        <div id="catalogo-contenido">
+            <div class="empty-state"><div class="empty-icon">⏳</div><p>Cargando productos...</p></div>
+        </div>
+        <div class="catalogo-footer">
+            <button class="btn-confirmar-productos" onclick="confirmarProductos()">✓ Confirmar productos</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DETALLE ESTIBADO -->
+<div class="modal-overlay" id="modalDetalleOverlay">
+    <div class="detalle-box">
+        <div class="detalle-header">
+            <button class="detalle-close" onclick="cerrarDetalleProducto()">×</button>
+        </div>
+        <div class="detalle-grid">
+            <div class="detalle-producto-card">
+                <div id="detalle-codigo"></div>
+                <div id="detalle-imagen">📦</div>
+                <div id="detalle-nombre"></div>
+                <div id="detalle-presentacion"></div>
+                <div id="detalle-precio"></div>
+            </div>
+            <div class="detalle-estibado">
+                <h4>Detalle del estibado</h4>
+                <div class="estibado-dato">
+                    <div class="label">Peso por pack</div>
+                    <div class="valor" id="detalle-peso-pack">—</div>
+                </div>
+                <div class="estibado-dato">
+                    <div class="label">Cantidad por tendido</div>
+                    <div class="valor" id="detalle-cant-tendido">—</div>
+                </div>
+                <div class="estibado-dato">
+                    <div class="label">Cantidad máxima</div>
+                    <div class="valor" id="detalle-cant-maxima">—</div>
+                </div>
+                <div class="cantidad-control">
+                    <label>Cantidad de packs a agregar</label>
+                    <input type="number" id="cantidad-agregar" min="1" value="1">
+                </div>
+            </div>
+            <div class="detalle-distribucion">
+                <h4 id="titulo-distribucion">Distribución pallets</h4>
+                <div id="visual-pallet">
+                    <div class="pallet-celda"></div><div class="pallet-celda"></div>
+                    <div class="pallet-celda" style="grid-row:span 3;"></div>
+                    <div class="pallet-celda"></div><div class="pallet-celda"></div>
+                    <div class="pallet-celda"></div><div class="pallet-celda"></div>
+                </div>
+                <div id="visual-aereo">
+                    <div class="caja-aerea">✈️ 📦</div>
+                    <div class="caja-aerea">✈️ 📦</div>
+                    <div class="caja-aerea">✈️ 📦</div>
+                </div>
+            </div>
+        </div>
+        <div class="detalle-footer">
+            <button class="btn-agregar-detalle" id="btn-agregar-detalle" onclick="agregarAlCarrito()">
+                🚢 Agregar al contenedor
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast">✅ Pedido enviado correctamente</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/pedidos.js') }}"></script>
+{% endblock %}

@@ -1,57 +1,93 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>home_cliente</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}">
-</head>
-<body>
+{% extends 'base_cliente.html' %}
 
-<header class="header">
-    <img src="{{ url_for('static', filename='img/logo.jpg')}}">
-    <input class="search" type="text" placeholder="Buscar por código o nombre de producto y pedido">
-    <div class="user-badge">
-        <div class="dropdown">
-            <span>Hola, Giovanny</span>
-            <button class="dropbtn"> ▼ </button>
-            <div class="dropdown-content">
-                <a href="#">Perfil</a>
-                <a href="logout" class="logout">Cerrar sesión</a>
+{% block titulo %}Inicio – Imporex{% endblock %}
+
+{% block contenido %}
+
+<!-- GRID: Estado pedido + Facturas -->
+<div class="content-homecliente">
+
+    <!-- Estado del pedido actual -->
+    <div class="card">
+        <div class="card-title">Estado del Pedido Actual</div>
+        <div class="tracking">
+            <div class="step completed">
+                <div class="circle">✓</div>
+                <div class="info"><h4>Preparación</h4><p>Productos empacados</p></div>
+            </div>
+            <div class="line active"></div>
+            <div class="step completed">
+                <div class="circle">✓</div>
+                <div class="info"><h4>Despacho</h4><p>En puerto de origen</p></div>
+            </div>
+            <div class="line active"></div>
+            <div class="step current">
+                <div class="circle">3</div>
+                <div class="info"><h4>En Ruta</h4><p>Tránsito marítimo</p></div>
+            </div>
+            <div class="line"></div>
+            <div class="step">
+                <div class="circle">4</div>
+                <div class="info"><h4>Entregado</h4><p>Puerto destino</p></div>
             </div>
         </div>
-    </div>
-</header>
-
-<div class="layout">
-    <aside class="sidebar">
-        <div class="menu-lateral">
-            <nav>
-                <ul>
-                    <li><a href='inicio'>Inicio</a></li>
-                    <li><a href='pedidos_cliente'>Pedidos</a></li>
-                    <li><a href='productos_cliente'>Productos</a></li>
-                    <li><a href='pedidos_progra_cliente'>Pedidos Programados</a></li>
-                </ul>
-            </nav>
-    </div>
-    </aside>
-    
-    <main class="content">
-        <div class="itemCarrusel">
-            <div class="targetaCarrusel"> 
-                Giio 
-            </div>        
-            <div class="flechasCarrusel">
-                <i>I</i>
-                <i>D</i>
-            </div>
+        <div class="detalle-envio">
+            <strong>Contenedor:</strong> MSKU-4827193 &nbsp;•&nbsp;
+            <strong>ETA:</strong> 15 Ene 2025 &nbsp;•&nbsp;
+            <strong>Ruta:</strong> Shanghái → Callao
         </div>
-    </main>
-    
+    </div>
 
-
+    <!-- Facturas pendientes -->
+    <div class="card">
+        <div class="card-title">Facturas Pendientes</div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Factura</th>
+                        <th>Monto</th>
+                        <th>Vencimiento</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for factura in facturas_pendientes %}
+                    <tr>
+                        <td>{{ factura['numero'] }}</td>
+                        <td>{{ factura['monto'] }}</td>
+                        <td>{{ factura['vencimiento'] }}</td>
+                        <td><span class="estado {{ factura['estado']|lower }}">{{ factura['estado'] }}</span></td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td>INV-2024-0892</td>
+                        <td>$12,450.00</td>
+                        <td>28 Dic 2024</td>
+                        <td><span class="estado vencida">Vencida</span></td>
+                    </tr>
+                    <tr>
+                        <td>INV-2024-0915</td>
+                        <td>$8,320.00</td>
+                        <td>10 Ene 2025</td>
+                        <td><span class="estado pendiente">Pendiente</span></td>
+                    </tr>
+                    <tr>
+                        <td>INV-2024-0938</td>
+                        <td>$5,780.00</td>
+                        <td>20 Ene 2025</td>
+                        <td><span class="estado pendiente">Pendiente</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="total-facturas">
+            <span>Total por cancelar:</span>
+            <strong>$26,550.00</strong>
+        </div>
+    </div>
 
 </div>
-    
-</body>
-</html>
+
+{% endblock %}

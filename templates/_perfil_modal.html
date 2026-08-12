@@ -1,0 +1,40 @@
+<!-- Modal Perfil -->
+<div id="modalPerfil" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+        <button type="button" id="btnCerrarModalPerfil" 
+                style="position:absolute;top:10px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#f7f7f8;">✕</button>
+        <h3>Mi Perfil</h3>
+
+        <div class="perfil-avatar-wrap">
+            <img id="perfilFotoImg"
+                src="{{ url_for('static', filename='img/avatar_default.png') }}"
+                alt="Foto de perfil"
+                class="perfil-avatar-img"
+                onerror="this.src='https://ui-avatars.com/api/?name=U&background=1A3A5C&color=fff&size=128'">
+            <label for="perfilFotoInput" class="btn-cambiar-foto">📷 Cambiar foto</label>
+            <input type="file" id="perfilFotoInput" name="foto" accept="image/png,image/jpeg,image/gif" hidden>
+        </div>
+
+        <form id="formPerfil">
+            <label>Usuario</label>
+            <input type="text" id="perfilUsername" value="{{ session['username'] }}" disabled>
+
+            <label>Nombre</label>
+            <input type="text" id="perfilNombre" name="nombre" value="{{ session.get('nombre', '') }}" disabled required>
+
+            <label>Correo</label>
+            <input type="email" id="perfilCorreo" name="correo" value="{{ session.get('correo', '') }}" disabled required>
+
+            <label>Nueva contraseña <span class="campo-opcional">(dejar en blanco para no cambiar)</span></label>
+            <input type="password" id="perfilPassword" name="password" placeholder="••••••••" disabled>
+
+            <label>Color para pallets — Pedido Programado</label>
+            <div id="selectorColorPallet" class="selector-colores"></div>
+            
+            <div class="modal-acciones">
+                <button type="button" id="btnHabilitarEdicionPerfil" class="btn-primary">✏️ Editar</button>
+                <button type="submit" id="btnGuardarPerfil" class="btn-primary" style="display:none">💾 Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>

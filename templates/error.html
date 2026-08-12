@@ -2,24 +2,120 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Error</title>
+    <title>Error – Imporex</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}">
+    <style>
+        body {
+            background: linear-gradient(135deg, #d9ecf7 0%, #eaf4fb 100%);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .error-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .error-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 48px 40px 40px;
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(26, 58, 92, .13);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .error-icono {
+            font-size: 64px;
+            line-height: 1;
+            margin-bottom: 8px;
+            animation: shake .4s ease;
+        }
+
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            25%      { transform: translateX(-6px); }
+            75%      { transform: translateX(6px); }
+        }
+
+        .error-titulo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1A3A5C;
+            margin: 0;
+        }
+
+        .error-desc {
+            font-size: 14px;
+            color: #64748B;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Muestra el mensaje flash si viene de Flask */
+        .error-flash {
+            background: #FEF2F2;
+            border: 1px solid #FECACA;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 13px;
+            color: #DC2626;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 4px;
+        }
+
+        .btn-volver {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 11px 36px;
+            background: #2D7DD2;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background .2s;
+        }
+
+        .btn-volver:hover { background: #1A3A5C; }
+    </style>
 </head>
 <body>
 
 <header class="header">
-    <img src="{{ url_for('static', filename='img/logo.jpg')}}">
+    <img src="{{ url_for('static', filename='img/logo.jpg') }}">
 </header>
 
-<main class="container">
+<div class="error-wrapper">
     <div class="error-box">
-        <div class="icon-error" style="width: 278px; font-size: 65px;">⚠️</div>
-        <p><strong>Ocurrió un error</strong></p>
-        <p>Revise la información e intente nuevamente</p>
-        
+
+        <div class="error-icono">⚠️</div>
+
+        <p class="error-titulo">Ocurrió un error</p>
+        <p class="error-desc">Revise la información e intente nuevamente</p>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for msg in messages %}
+                <div class="error-flash">{{ msg }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <a class="btn-volver" href="javascript:history.back()">← Volver</a>
+
     </div>
-    <a class="btn-volver" href="login">Volver</a>
-</main>
+</div>
 
 </body>
 </html>
