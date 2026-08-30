@@ -1940,8 +1940,9 @@ white-space: nowrap;
 /* contenedor productos cliente */
 .productos-cliente {
     width: 800px;
-    margin: auto;
-    padding-top: 60px;
+    margin: 100px;
+    margin-top: 0px;
+    padding-top: 86px;
 }
 .login-box h3 {
     margin-bottom: 0px;
